@@ -1,12 +1,16 @@
 CURRENT_BG='NONE'
-ENTORNO="INTERNO"
-[[ $ENTORNO = "PRODUCCIÓN" ]] && COLOR_ENTORNO="160"
-[[ $ENTORNO = "PREPRODUCCIÓN" ]] && COLOR_ENTORNO="099"
-[[ $ENTORNO = "DESARROLLO" ]] && COLOR_ENTORNO="208"
-[[ $ENTORNO = "INTERNO" ]] && COLOR_ENTORNO="042"
 
-#Información que se muestra después del entorno
+# Set environment options
+ENVIRONMENT="PREPRODUCCIÓN"
+
+# Extra information after environment name
 EXTRA_INFO=""
+
+ENVIRONMENT_COLOUR="026" #by default
+[[ $ENVIRONMENT = "PRODUCCIÓN" ]]     && ENVIRONMENT_COLOUR="001"
+[[ $ENVIRONMENT = "PREPRODUCCIÓN" ]]  && ENVIRONMENT_COLOUR="091"
+[[ $ENVIRONMENT = "DESARROLLO" ]]     && ENVIRONMENT_COLOUR="014"
+[[ $ENVIRONMENT = "INTERNO" ]]        && ENVIRONMENT_COLOUR="036"
 
 case ${SOLARIZED_THEME:-dark} in
     light) CURRENT_FG='white';;
@@ -14,15 +18,15 @@ case ${SOLARIZED_THEME:-dark} in
 esac
 
 # Special Powerline characters
-
 () {
   local LC_ALL="" LC_CTYPE="es_ES.UTF-8"
-  SEGMENT_SEPARATOR=$'\ue0b0'
-}
+  #Other separators: ◣ ◤ ░ ❯ \ue0b0
+  
+  SEGMENT_SEPARATOR=$'◤'
+  }
 
+  
 # Begin a segment
-# Takes two arguments, background and foreground. Both can be omitted,
-# rendering default background/foreground.
 prompt_segment() {
   local bg fg
   [[ -n $1 ]] && bg="%K{$1}" || bg="%k"
@@ -47,6 +51,7 @@ prompt_end() {
   CURRENT_BG=''
 }
 
+
 prompt_context() {
   if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
     prompt_segment 243 default "%(!.%{%F{white}%}.)$HOST"
@@ -55,45 +60,63 @@ prompt_context() {
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment 039 $CURRENT_FG '%~'
-  #prompt_segment blue $CURRENT_FG '%~'
+  prompt_segment 039 $CURRENT_FG '⎘ %~ '
 }
 
 
+# status icons
 prompt_status() {
   local -a symbols
 
-  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}%{%G⚠️ %}"
-  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}%{%G🧵"%}
+  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}%{%G✖%}"
+  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}%{%G⮔ "%}
   [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}%{%G🦸"%}
 
   [[ -n "$symbols" ]] && prompt_segment 239 default "$symbols"
 }
 
-entorno_sdos() {
-
-    prompt_segment 248 black "$(hostname -I | cut -d ' ' -f 1)"
-    prompt_segment $COLOR_ENTORNO white "$ENTORNO $EXTRA_INFO"
-
+# LAN address
+local_ip() {
+  prompt_segment 248 black "$(hostname -I | cut -d ' ' -f 1)"
 }
 
+# Environment name
+environment() {
+    [[ -z $ENVIRONMENT ]] || prompt_segment $ENVIRONMENT_COLOUR white "$ENVIRONMENT$EXTRA_INFO"
+}
 
+# Get count of running or stopped docker's containers 
 dockerCount() {
     prompt_segment 027 045 "%{%G🐋%}$(docker info|  grep 'Running:\|Stopped:' | tr \\n ' ' | sed 's/   / /g' | sed 's/Running: /⯈ /' | sed 's/Stopped:/ ■/')"
 }
+
+
+# Detects connection to openVPN and shows the IP of the tunnel
+vpn() {    
+    openvpn="$(ip a | grep 'tun0$' | xargs)"
+    if [[ $openvpn =~ "tun0" ]];then
+      vpnIP="$(cut -d ' ' -f2 <<<$openvpn | cut -d '/' -f1)"
+      prompt_segment 119 034 "%{%G🔐%} $vpnIP"
+    fi
+}
+
+
 
 ## Main prompt
 build_prompt() {
   RETVAL=$?
   prompt_status
   prompt_context
-  entorno_sdos
+  local_ip
+  vpn
+  environment
   [[ $SERVICIODOCKER = "1" ]] && dockerCount
   prompt_dir
-# prompt_end
+  #prompt_end
 }
 
+# Write the prompt (two lines)
 PROMPT='
-%{%f%b%k%}$(build_prompt) ⤶ '
+%{%f%b%k%}$(build_prompt) '
 PROMPT+='
-$(prompt_segment null 243 "%n")$(prompt_segment null $COLOR_ENTORNO "〉")'
+$(prompt_segment null 243 "%n")$(prompt_segment null $ENVIRONMENT_COLOUR "〉")'

@@ -22,7 +22,7 @@ esac
   local LC_ALL="" LC_CTYPE="es_ES.UTF-8"
   #Other separators: ◣ ◤ ░ ❯ \ue0b0
   SEGMENT_SEPARATOR=$'░❯'
-  #SEGMENT_SEPARATOR=$'◤' #Works fine (full height) in Kali2020.3+Tilix, however it doesn't in Debian10+Tilix  
+  #SEGMENT_SEPARATOR=$'◤' #Works fine (full height) in Kali2020.3, however it doesn't in Debian10  
   }
 
   

@@ -2,9 +2,11 @@ CURRENT_BG='NONE'
 
 # Set environment options
 ENVIRONMENT="PREPRODUCCIÓN"
-
 # Extra information after environment name
 EXTRA_INFO=""
+
+#Gradient at the endo of first line of promot? [1|0]
+GRADIENT="0"
 
 ENVIRONMENT_COLOUR="026" #by default
 [[ $ENVIRONMENT = "PRODUCCIÓN" ]]     && ENVIRONMENT_COLOUR="001"
@@ -21,8 +23,8 @@ esac
 () {
   local LC_ALL="" LC_CTYPE="es_ES.UTF-8"
   #Other separators: ◣ ◤ ░ ❯ \ue0b0
-  SEGMENT_SEPARATOR=$'░❯'
-  #SEGMENT_SEPARATOR=$'◤' #Works fine (full height) in Kali2020.3, however it doesn't in Debian10  
+  
+  SEGMENT_SEPARATOR=$'❯'
   }
 
   
@@ -43,7 +45,7 @@ prompt_segment() {
 # End the prompt, closing any open segments
 prompt_end() {
   if [[ -n $CURRENT_BG ]]; then
-    echo -n " %{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR"
+    echo -n " %{%k%F{$CURRENT_BG}%}▓▒░"
   else
     echo -n "%{%k%}"
   fi
@@ -112,7 +114,7 @@ build_prompt() {
   environment
   [[ $SERVICIODOCKER = "1" ]] && dockerCount
   prompt_dir
-  #prompt_end
+  [[ $GRADIENT = "1" ]] && prompt_end
 }
 
 # Write the prompt (two lines)
@@ -120,3 +122,4 @@ PROMPT='
 %{%f%b%k%}$(build_prompt) '
 PROMPT+='
 $(prompt_segment null 243 "%n")$(prompt_segment null $ENVIRONMENT_COLOUR "〉")'
+

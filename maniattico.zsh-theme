@@ -6,7 +6,7 @@ ENVIRONMENT="PREPRODUCCIÓN"
 EXTRA_INFO=""
 
 #Gradient at the endo of first line of promot? [1|0]
-GRADIENT="0"
+GRADIENT="1"
 
 ENVIRONMENT_COLOUR="026" #by default
 [[ $ENVIRONMENT = "PRODUCCIÓN" ]]     && ENVIRONMENT_COLOUR="001"
@@ -72,7 +72,7 @@ prompt_status() {
 
   [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}%{%G✖%}"
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}%{%G⮔ "%}
-  [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}%{%G🦸"%}
+  [[ $UID -eq 0 ]] && symbols+="%{%F{white}%}%{%G#"%}
 
   [[ -n "$symbols" ]] && prompt_segment 239 default "$symbols"
 }
@@ -122,4 +122,3 @@ PROMPT='
 %{%f%b%k%}$(build_prompt) '
 PROMPT+='
 $(prompt_segment null 243 "%n")$(prompt_segment null $ENVIRONMENT_COLOUR "〉")'
-

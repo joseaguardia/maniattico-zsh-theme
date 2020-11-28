@@ -1,20 +1,27 @@
 # maniattico.zsh-theme
 
-## Tema para ZSH basado en agnoster.
+## ZSH theme, fork of 'agnoster'
 
-Vista general: hostname, IP, entorno y ruta actual
-![captura1](https://github.com/joseaguardia/maniattico-zsh-theme/blob/master/images/zsh01.png?raw=true)
+Normal view: hostname, IP, environment and pwd
+![captura1](https://github.com/joseaguardia/maniattico-zsh-theme/blob/master/images/zsh2_a.png?raw=true)
 
-Iconos para: error en el último comando, trabajo en segundo plano ejecutándose y usuario root
-![captura2](https://github.com/joseaguardia/maniattico-zsh-theme/blob/master/images/zsh02.png?raw=true)
+**New icons** for last command status and background task
+![captura2](https://github.com/joseaguardia/maniattico-zsh-theme/blob/master/images/zsh2_b.png?raw=true)
 
-Docker: si se detecta el servicio docker activo, muestra el número de contenedores activos y parados.
-![captura3](https://github.com/joseaguardia/maniattico-zsh-theme/blob/master/images/zsh03.png?raw=true)
+New feature: if an **openVPN connection** is established, it shows current IP address.
+![captura3](https://github.com/joseaguardia/maniattico-zsh-theme/blob/master/images/zsh2_c.png?raw=true)
 
-**Para que esto funcione es necesario añadir lo siguiente a ~/.zshrc:**                           
+
+**Docker**: with the docker service running, it shows the containers that are started and stopped
+![captura4](https://github.com/joseaguardia/maniattico-zsh-theme/blob/master/images/zsh2_d.png?raw=true)
+
+**To use it, you need to add the following line to ~/.zshrc:**                           
 `/usr/bin/systemctl status docker > /dev/null 2> /dev/null && SERVICIODOCKER="1" || SERVICIODOCKER="0"`
 
-Un color para cada tipo de entorno:
-![captura4](https://github.com/joseaguardia/maniattico-zsh-theme/blob/master/images/zsh04.png?raw=true)
-![captura5](https://github.com/joseaguardia/maniattico-zsh-theme/blob/master/images/zsh05.png?raw=true)
-![captura6](https://github.com/joseaguardia/maniattico-zsh-theme/blob/master/images/zsh06.png?raw=true)
+You can **disable the gradient** at the end of first prompt line:
+![captura5](https://github.com/joseaguardia/maniattico-zsh-theme/blob/master/images/zsh2_d.png?raw=true)
+
+
+**Different colours** for every environment:
+![captura6](https://github.com/joseaguardia/maniattico-zsh-theme/blob/master/images/zsh2_f.png?raw=true)
+

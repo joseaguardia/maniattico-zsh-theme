@@ -19,7 +19,7 @@ New feature: if an **openVPN connection** is established, it shows current IP ad
 `/usr/bin/systemctl status docker > /dev/null 2> /dev/null && SERVICIODOCKER="1" || SERVICIODOCKER="0"`
 
 You can **disable the gradient** at the end of first prompt line:
-![captura5](https://github.com/joseaguardia/maniattico-zsh-theme/blob/master/images/zsh2_d.png?raw=true)
+![captura5](https://github.com/joseaguardia/maniattico-zsh-theme/blob/master/images/zsh2_e.png?raw=true)
 
 
 **Different colours** for every environment:

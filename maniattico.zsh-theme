@@ -1,13 +1,11 @@
 #Version 2.1-20201129
 
-CURRENT_BG='NONE'
-
 # Set environment options
 ENVIRONMENT="DESARROLLO"
 # Extra information after environment name
 EXTRA_INFO=""
 
-#Gradient at the endo of first line of promot? [1|0]
+#Gradient at the end of first line of prompt? [1|0]
 GRADIENT="1"
 
 ENVIRONMENT_COLOUR="027" #by default
@@ -15,6 +13,9 @@ ENVIRONMENT_COLOUR="027" #by default
 [[ $ENVIRONMENT = "PREPRODUCCIÓN" ]]  && ENVIRONMENT_COLOUR="091"
 [[ $ENVIRONMENT = "DESARROLLO" ]]     && ENVIRONMENT_COLOUR="208"
 [[ $ENVIRONMENT = "INTERNO" ]]        && ENVIRONMENT_COLOUR="042"
+
+
+CURRENT_BG='NONE'
 
 case ${SOLARIZED_THEME:-dark} in
     light) CURRENT_FG='white';;

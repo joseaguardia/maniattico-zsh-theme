@@ -10,11 +10,11 @@ EXTRA_INFO=""
 #Gradient at the endo of first line of promot? [1|0]
 GRADIENT="1"
 
-ENVIRONMENT_COLOUR="026" #by default
+ENVIRONMENT_COLOUR="027" #by default
 [[ $ENVIRONMENT = "PRODUCCIÓN" ]]     && ENVIRONMENT_COLOUR="001"
 [[ $ENVIRONMENT = "PREPRODUCCIÓN" ]]  && ENVIRONMENT_COLOUR="091"
 [[ $ENVIRONMENT = "DESARROLLO" ]]     && ENVIRONMENT_COLOUR="208"
-[[ $ENVIRONMENT = "INTERNO" ]]        && ENVIRONMENT_COLOUR="036"
+[[ $ENVIRONMENT = "INTERNO" ]]        && ENVIRONMENT_COLOUR="042"
 
 case ${SOLARIZED_THEME:-dark} in
     light) CURRENT_FG='white';;

@@ -191,3 +191,7 @@ PROMPT='
 PROMPT+='
 $(prompt_segment null 243 "%n")$(prompt_segment null $ENVIRONMENT_COLOUR "〉")'
 
+
+#Aliases and other configurations
+alias vi='vim'
+bindkey \^U backward-kill-line 

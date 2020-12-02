@@ -1,12 +1,6 @@
 #Version 2.2-20201130
 
-# Set environment options
-ENVIRONMENT="DESARROLLO"
-# Extra information after environment name
-EXTRA_INFO=""
-
-#Gradient at the end of first line of prompt? [1|0]
-GRADIENT="0"
+. maniattico.zsh-theme.cfg
 
 ENVIRONMENT_COLOUR="027" #by default
 [[ $ENVIRONMENT = "PRODUCCIÓN" ]]     && ENVIRONMENT_COLOUR="001"

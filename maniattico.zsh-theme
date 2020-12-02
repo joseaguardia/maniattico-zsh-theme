@@ -6,7 +6,7 @@ ENVIRONMENT="DESARROLLO"
 EXTRA_INFO=""
 
 #Gradient at the end of first line of prompt? [1|0]
-GRADIENT="1"
+GRADIENT="0"
 
 ENVIRONMENT_COLOUR="027" #by default
 [[ $ENVIRONMENT = "PRODUCCIÓN" ]]     && ENVIRONMENT_COLOUR="001"

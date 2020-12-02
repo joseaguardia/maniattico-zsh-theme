@@ -1,6 +1,6 @@
 #Version 2.2-20201130
 
-. maniattico.zsh-theme.cfg
+. ~/.oh-my-zsh/themes/maniattico.zsh-theme.cfg
 
 ENVIRONMENT_COLOUR="027" #by default
 [[ $ENVIRONMENT = "PRODUCCIÓN" ]]     && ENVIRONMENT_COLOUR="001"

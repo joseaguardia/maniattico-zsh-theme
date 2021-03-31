@@ -2,6 +2,9 @@
 
 . ~/.oh-my-zsh/themes/maniattico.zsh-theme.cfg
 
+#Auto-upgrade
+DISABLE_UPDATE_PROMPT=true
+
 ENVIRONMENT_COLOUR="027" #by default
 [[ $ENVIRONMENT = "PRODUCCIÓN" ]]     && ENVIRONMENT_COLOUR="001"
 [[ $ENVIRONMENT = "PREPRODUCCIÓN" ]]  && ENVIRONMENT_COLOUR="091"

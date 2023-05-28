@@ -1,4 +1,4 @@
-#Version 2.2-20201130
+#Version 2.3-20230528
 
 . ~/.oh-my-zsh/themes/maniattico.zsh-theme.cfg
 
@@ -159,7 +159,7 @@ dockerCount() {
 
 
 # Detects connection to openVPN and shows the IP of the tunnel
-vpn() {    
+openvpn() {    
     openvpn="$(ip a | grep 'tun0$' | xargs)"
     if [[ $openvpn =~ "tun0" ]];then
       vpnIP="$(cut -d ' ' -f2 <<<$openvpn | cut -d '/' -f1)"
@@ -167,6 +167,12 @@ vpn() {
     fi
 }
 
+wireguard() {    
+    if sudo wg show | grep 'latest handshake' > /dev/null; then
+      wgserver="$(sudo wg show | grep 'interface: ' | cut -d ':' -f2 | tr -d ' ')"
+      prompt_segment 119 034 "%{%G🐉%} $wgserver"
+    fi
+}
 
 
 ## Main prompt
@@ -175,7 +181,8 @@ build_prompt() {
   prompt_status
   prompt_context
   local_ip
-  vpn
+  openvpn
+  wireguard
   environment
   [[ $SERVICIODOCKER = "1" ]] && dockerCount
   prompt_dir
@@ -192,4 +199,4 @@ $(prompt_segment null 243 "%n")$(prompt_segment null $ENVIRONMENT_COLOUR "〉")'
 
 #Aliases and other configurations
 alias vi='vim'
-bindkey \^U backward-kill-line 
+bindkey \^U backward-kill-line

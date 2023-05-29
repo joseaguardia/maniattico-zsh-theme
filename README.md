@@ -9,7 +9,7 @@
 **New icons** for last command status and background task
 ![captura2](https://github.com/joseaguardia/maniattico-zsh-theme/blob/master/images/zsh2_b.png?raw=true)
 
-New feature: if an **openVPN connection** is established, it shows current IP address.
+If  **openVPN or WireGuard connection** is established, it shows current IP address.
 ![captura3](https://github.com/joseaguardia/maniattico-zsh-theme/blob/master/images/zsh2_c.png?raw=true)
 
 

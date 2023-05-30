@@ -1,6 +1,10 @@
-#Version 2.4-20230529
+#Version 2.5-20230530
 
 . ~/.oh-my-zsh/themes/maniattico.zsh-theme.cfg
+
+#Comprobamos servicios para evitar errores
+/usr/bin/systemctl status docker > /dev/null 2> /dev/null && SERVICIODOCKER="1" || SERVICIODOCKER="0"
+wg-quick -h > /dev/null 2> /dev/null && WIREGUARD="1" || WIREGUARD="0"
 
 #Auto-upgrade
 DISABLE_UPDATE_PROMPT=true
@@ -182,7 +186,7 @@ build_prompt() {
   prompt_context
   local_ip
   openvpn
-  wireguard
+  [[ $WIREGUARD = "1" ]] && wireguard
   environment
   [[ $SERVICIODOCKER = "1" ]] && dockerCount
   prompt_dir

@@ -1,5 +1,4 @@
 #Version 2.5-20230530
-
 . ~/.oh-my-zsh/themes/maniattico.zsh-theme.cfg
 
 #Comprobamos servicios para evitar errores
@@ -137,7 +136,7 @@ prompt_git() {
 prompt_status() {
   local -a symbols
 
-  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}%{%G✖%}"
+  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}%{%G❌%}"
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}%{%G⮔ "%}
   [[ $UID -eq 0 ]] && symbols+="%{%F{white}%}%{%G#"%}
 

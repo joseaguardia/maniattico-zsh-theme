@@ -1,4 +1,5 @@
 #Version 2.5-20230530
+
 . ~/.oh-my-zsh/themes/maniattico.zsh-theme.cfg
 
 #Comprobamos servicios para evitar errores
@@ -166,14 +167,14 @@ openvpn() {
     openvpn="$(ip a | grep 'tun0$' | xargs)"
     if [[ $openvpn =~ "tun0" ]];then
       vpnIP="$(cut -d ' ' -f2 <<<$openvpn | cut -d '/' -f1)"
-      prompt_segment 214 021 "%{%G🔌🔘%} $vpnIP"
+      prompt_segment 214 027 "%{%G🔌🔘%}$vpnIP"
     fi
 }
 
 wireguard() {    
     if sudo wg show | grep 'latest handshake' > /dev/null; then
       wgserver="$(sudo wg show | grep 'interface: ' | cut -d ':' -f2 | tr -d ' ')"
-      prompt_segment 124 255 "%{%G🔌🐉%} $wgserver"
+      prompt_segment 124 255 "%{%G🔌🐉%}$wgserver"
     fi
 }
 

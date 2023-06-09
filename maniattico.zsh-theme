@@ -1,4 +1,4 @@
-#Version 2.5-20230530
+#Version 2.6-20230610
 
 . ~/.oh-my-zsh/themes/maniattico.zsh-theme.cfg
 
@@ -9,7 +9,7 @@ wg-quick -h > /dev/null 2> /dev/null && WIREGUARD="1" || WIREGUARD="0"
 #Auto-upgrade
 DISABLE_UPDATE_PROMPT=true
 
-ENVIRONMENT_COLOUR="027" #by default
+ENVIRONMENT_COLOUR="039" #by default
 [[ $ENVIRONMENT = "PRODUCCIÓN" ]]     && ENVIRONMENT_COLOUR="001"
 [[ $ENVIRONMENT = "PREPRODUCCIÓN" ]]  && ENVIRONMENT_COLOUR="091"
 [[ $ENVIRONMENT = "DESARROLLO" ]]     && ENVIRONMENT_COLOUR="208"
@@ -137,7 +137,7 @@ prompt_git() {
 prompt_status() {
   local -a symbols
 
-  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}%{%G❌%}"
+  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}%{%G☠ %}"
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}%{%G⮔ "%}
   [[ $UID -eq 0 ]] && symbols+="%{%F{white}%}%{%G#"%}
 
@@ -163,7 +163,7 @@ dockerCount() {
 
 
 # Detects connection to openVPN and shows the IP of the tunnel
-openvpn() {    
+openvpn_status() {    
     openvpn="$(ip a | grep 'tun0$' | xargs)"
     if [[ $openvpn =~ "tun0" ]];then
       vpnIP="$(cut -d ' ' -f2 <<<$openvpn | cut -d '/' -f1)"
@@ -171,11 +171,27 @@ openvpn() {
     fi
 }
 
-wireguard() {    
+wireguard_status() {    
     if sudo wg show | grep 'latest handshake' > /dev/null; then
       wgserver="$(sudo wg show | grep 'interface: ' | cut -d ':' -f2 | tr -d ' ')"
-      prompt_segment 124 255 "%{%G🔌🐉%}$wgserver"
+      prompt_segment 088 255 "%{%G🔌🐉%}$wgserver"
     fi
+}
+
+metrics() {
+
+  #Right prompt
+  LOAD="$(w | grep 'load average:' | awk '{print $10}' | sed 's/,$//' | tr ',' '.')*100/$(nproc)"
+  PORCENTAJE_CPU="$(echo $LOAD | bc)"
+  DISCO=$(df -h / | awk '/\// {print $5}' | tr -d '%')
+  RAM_USADA="$(free -m | awk '/Memoria:/ {print $3}')"
+  echo "$RAM_USADA ram usada"
+  RAM_TOTAL="$(free -m | awk '/Memoria:/ {print $2}')"
+  echo "$RAM_TOTAL ram total"
+  RAM=`echo "${RAM_USADA}*100/${RAM_TOTAL}" | bc`
+
+  prompt_segment 124 255 "%{%G⬛${PORCENTAJE_CPU} ⚫$DISCO ➰$RAM%}"
+
 }
 
 
@@ -185,14 +201,15 @@ build_prompt() {
   prompt_status
   prompt_context
   local_ip
-  openvpn
-  [[ $WIREGUARD = "1" ]] && wireguard
+  openvpn_status
+  [[ $WIREGUARD = "1" ]] && wireguard_status
   environment
   [[ $SERVICIODOCKER = "1" ]] && dockerCount
   prompt_dir
   prompt_git
   [[ $GRADIENT = "1" ]] && prompt_end
 }
+
 
 # Write the prompt (two lines)
 PROMPT='

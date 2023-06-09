@@ -75,7 +75,7 @@ prompt_end() {
 
 prompt_context() {
   if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    prompt_segment 243 default "%(!.%{%F{white}%}.)$HOST"
+    prompt_segment $ENVIRONMENT_COLOUR default "%(!.%{%F{white}%}.)$HOST"
   fi
 }
 
@@ -153,7 +153,8 @@ local_ip() {
 
 # Environment name
 environment() {
-    [[ -z $ENVIRONMENT ]] || prompt_segment $ENVIRONMENT_COLOUR white "$ENVIRONMENT$EXTRA_INFO"
+    #[[ -z $ENVIRONMENT ]] || prompt_segment $ENVIRONMENT_COLOUR white "$ENVIRONMENT$EXTRA_INFO"
+    [[ -z $EXTRA_INFO ]] || prompt_segment $ENVIRONMENT_COLOUR white "$EXTRA_INFO"
 }
 
 # Get count of running or stopped docker's containers 
@@ -200,10 +201,10 @@ build_prompt() {
   RETVAL=$?
   prompt_status
   prompt_context
+  environment
   local_ip
   openvpn_status
   [[ $WIREGUARD = "1" ]] && wireguard_status
-  environment
   [[ $SERVICIODOCKER = "1" ]] && dockerCount
   prompt_dir
   prompt_git

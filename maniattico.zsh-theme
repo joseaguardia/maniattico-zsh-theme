@@ -1,4 +1,4 @@
-#Version 2.6-20230610
+#Version 2.7-20230611
 
 . ~/.oh-my-zsh/themes/maniattico.zsh-theme.cfg
 
@@ -9,12 +9,12 @@ wg-quick -h > /dev/null 2> /dev/null && WIREGUARD="1" || WIREGUARD="0"
 #Auto-upgrade
 DISABLE_UPDATE_PROMPT=true
 
-ENVIRONMENT_COLOUR="039" #by default
+ENVIRONMENT_COLOUR="208" #by default
 [[ $ENVIRONMENT = "PRODUCCIÓN" ]]     && ENVIRONMENT_COLOUR="001"
 [[ $ENVIRONMENT = "PREPRODUCCIÓN" ]]  && ENVIRONMENT_COLOUR="091"
-[[ $ENVIRONMENT = "DESARROLLO" ]]     && ENVIRONMENT_COLOUR="208"
+[[ $ENVIRONMENT = "DESARROLLO" ]]     && ENVIRONMENT_COLOUR="220"
 [[ $ENVIRONMENT = "INTERNO" ]]        && ENVIRONMENT_COLOUR="042"
-[[ $ENVIRONMENT = "maniattico" ]]     && ENVIRONMENT_COLOUR="162"
+[[ $ENVIRONMENT = "CUSTOM" ]]         && ENVIRONMENT_COLOUR="$CUSTOM_COLOUR"
 
 
 CURRENT_BG='NONE'
@@ -46,7 +46,11 @@ pastefinish() {
 zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
 
+#Detectamos si es ROOT o no
   
+[[ $UID -eq 0 ]] && ICONO_PROMPT="#" || ICONO_PROMPT='$'
+
+
 # Begin a segment
 prompt_segment() {
   local bg fg
@@ -75,13 +79,13 @@ prompt_end() {
 
 prompt_context() {
   if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    prompt_segment $ENVIRONMENT_COLOUR default "%(!.%{%F{white}%}.)$HOST"
+    prompt_segment $ENVIRONMENT_COLOUR 236 "%(!.%{%F{white}%}.)$HOST"
   fi
 }
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment 039 $CURRENT_FG '⎘ %~ '
+  prompt_segment 159 $CURRENT_FG '⎘ %~ '
 }
 
 
@@ -137,6 +141,7 @@ prompt_git() {
 prompt_status() {
   local -a symbols
 
+  symbols+="%{%F{red}%}%{%G %}"
   [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}%{%G☠ %}"
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}%{%G⮔ "%}
   [[ $UID -eq 0 ]] && symbols+="%{%F{white}%}%{%G#"%}
@@ -148,7 +153,7 @@ prompt_status() {
 local_ip() {
   LOCAL_ADDR="$(hostname -I | cut -d ' ' -f 1)"
   [[ -z $LOCAL_ADDR ]] && LOCAL_ADDR="🌍❗"
-  prompt_segment 248 black "$LOCAL_ADDR"
+  prompt_segment 248 236 "$LOCAL_ADDR"
 }
 
 # Environment name
@@ -214,9 +219,9 @@ build_prompt() {
 
 # Write the prompt (two lines)
 PROMPT='
-%{%f%b%k%}$(build_prompt) '
+%{ %f%b%k%}$(build_prompt) '
 PROMPT+='
-$(prompt_segment null 243 "%n")$(prompt_segment null $ENVIRONMENT_COLOUR "〉")'
+$(prompt_segment null 243 "%n")$(prompt_segment null $ENVIRONMENT_COLOUR "$ICONO_PROMPT ")'
 
 
 #Aliases and other configurations

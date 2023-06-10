@@ -1,4 +1,4 @@
-#Version 2.7-20230611
+#Version 2.6-20230610
 
 . ~/.oh-my-zsh/themes/maniattico.zsh-theme.cfg
 
@@ -144,7 +144,7 @@ prompt_status() {
   symbols+="%{%F{red}%}%{%G %}"
   [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}%{%G☠ %}"
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}%{%G⮔ "%}
-  [[ $UID -eq 0 ]] && symbols+="%{%F{white}%}%{%G#"%}
+  #[[ $UID -eq 0 ]] && symbols+="%{%F{white}%}%{%G#"%}
 
   [[ -n "$symbols" ]] && prompt_segment 239 default "$symbols"
 }

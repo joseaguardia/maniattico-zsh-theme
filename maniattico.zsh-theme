@@ -1,4 +1,4 @@
-#Version 2.6-20230610
+#Version 2.7-20230613
 
 . ~/.oh-my-zsh/themes/maniattico.zsh-theme.cfg
 
@@ -140,8 +140,9 @@ prompt_git() {
 # status icons
 prompt_status() {
   local -a symbols
-
+  metrics
   symbols+="%{%F{red}%}%{%G %}"
+  [[ $ALERTA -eq 1 ]] && symbols+="%{%F{red}%}%{%G⚠️ %}"
   [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}%{%G☠ %}"
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}%{%G⮔ "%}
   #[[ $UID -eq 0 ]] && symbols+="%{%F{white}%}%{%G#"%}
@@ -191,12 +192,14 @@ metrics() {
   PORCENTAJE_CPU="$(echo $LOAD | bc)"
   DISCO=$(df -h / | awk '/\// {print $5}' | tr -d '%')
   RAM_USADA="$(free -m | awk '/Memoria:/ {print $3}')"
-  echo "$RAM_USADA ram usada"
   RAM_TOTAL="$(free -m | awk '/Memoria:/ {print $2}')"
-  echo "$RAM_TOTAL ram total"
   RAM=`echo "${RAM_USADA}*100/${RAM_TOTAL}" | bc`
 
-  prompt_segment 124 255 "%{%G⬛${PORCENTAJE_CPU} ⚫$DISCO ➰$RAM%}"
+  if [[ $PORCENTAJE_CPU -gt 75 ]] || [[ $DISCO -gt 95 ]] || [[ $RAM -gt 90 ]]; then
+    ALERTA=1
+  else
+    ALERTA=0
+  fi
 
 }
 

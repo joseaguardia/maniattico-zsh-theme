@@ -140,9 +140,9 @@ prompt_git() {
 # status icons
 prompt_status() {
   local -a symbols
-  metrics
+  #metrics
   symbols+="%{%F{red}%}%{%G %}"
-  [[ $ALERTA -eq 1 ]] && symbols+="%{%F{red}%}%{%G⚠️ %}"
+  #[[ $ALERTA -eq 1 ]] && symbols+="%{%F{red}%}%{%G⚠️ %}"
   [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}%{%G☠ %}"
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}%{%G⮔ "%}
   #[[ $UID -eq 0 ]] && symbols+="%{%F{white}%}%{%G#"%}

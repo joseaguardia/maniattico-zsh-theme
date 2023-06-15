@@ -1,4 +1,4 @@
-#Version 2.7-20230613
+#Version 2.8-20230615
 
 . ~/.oh-my-zsh/themes/maniattico.zsh-theme.cfg
 
@@ -108,9 +108,9 @@ prompt_git() {
     dirty=$(parse_git_dirty)
     ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
     if [[ -n $dirty ]]; then
-      prompt_segment yellow black
+      prompt_segment 227 black
     else
-      prompt_segment green $CURRENT_FG
+      prompt_segment 191 $CURRENT_FG
     fi
 
     if [[ -e "${repo_path}/BISECT_LOG" ]]; then

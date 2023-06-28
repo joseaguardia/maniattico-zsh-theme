@@ -1,4 +1,4 @@
-#Version 2.8-20230615
+#Version 2.9-20230628
 
 . ~/.oh-my-zsh/themes/maniattico.zsh-theme.cfg
 
@@ -169,7 +169,7 @@ dockerCount() {
 }
 
 
-# Detects connection to openVPN and shows the IP of the tunnel
+# Detects connection to openVPN, wireguard and forticlient and shows the IP of the tunnel
 openvpn_status() {    
     openvpn="$(ip a | grep 'tun0$' | xargs)"
     if [[ $openvpn =~ "tun0" ]];then
@@ -184,6 +184,14 @@ wireguard_status() {
       prompt_segment 088 255 "%{%G🔌🐉%}$wgserver"
     fi
 }
+
+forticlient_status() {    
+    forticlient_ip="$(ip a | grep 'global vpn' | awk '{print $2}' | cut -d '/' -f1)"
+    if [[ -n $forticlient_ip ]];then
+      prompt_segment 045 254 "%{%G🔌🛡️%} $forticlient_ip"
+    fi
+}
+
 
 metrics() {
 
@@ -212,6 +220,7 @@ build_prompt() {
   environment
   local_ip
   openvpn_status
+  forticlient_status
   [[ $WIREGUARD = "1" ]] && wireguard_status
   [[ $SERVICIODOCKER = "1" ]] && dockerCount
   prompt_dir

@@ -1,10 +1,11 @@
-#Version 2.9-20230628
+#Version 20230630
 
 . ~/.oh-my-zsh/themes/maniattico.zsh-theme.cfg
 
 #Comprobamos servicios para evitar errores
 /usr/bin/systemctl status docker > /dev/null 2> /dev/null && SERVICIODOCKER="1" || SERVICIODOCKER="0"
 wg-quick -h > /dev/null 2> /dev/null && WIREGUARD="1" || WIREGUARD="0"
+screen -h > /dev/null 2> /dev/null && SCREEN="1" || SCREEN="0"
 
 #Auto-upgrade
 DISABLE_UPDATE_PROMPT=true
@@ -29,7 +30,7 @@ esac
   local LC_ALL="" LC_CTYPE="es_ES.UTF-8"
   #Other separators: ◣ ◤ ░ ❯ \ue0b0
   
-  SEGMENT_SEPARATOR=$'❯'
+  SEGMENT_SEPARATOR=$'⟩'
   }
 
 
@@ -49,7 +50,7 @@ zstyle :bracketed-paste-magic paste-finish pastefinish
 #Detectamos si es ROOT o no
   
 [[ $UID -eq 0 ]] && ICONO_PROMPT="#" || ICONO_PROMPT='$'
-
+[[ -n $STY ]] && ICONO_PROMPT+="SCREEN"
 
 # Begin a segment
 prompt_segment() {
@@ -141,13 +142,14 @@ prompt_git() {
 prompt_status() {
   local -a symbols
   #metrics
-  symbols+="%{%F{red}%}%{%G %}"
+  symbols+=""
+  #symbols+="%{%F{red}%}%{%G %}"
   #[[ $ALERTA -eq 1 ]] && symbols+="%{%F{red}%}%{%G⚠️ %}"
-  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}%{%G☠ %}"
-  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}%{%G⮔ "%}
-  #[[ $UID -eq 0 ]] && symbols+="%{%F{white}%}%{%G#"%}
+  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}%{%G⮿%}"
+  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{red}%}%{%G⮔%}"
+  [[ $SCREEN = "1" ]] && [[ $(screen -ls | grep '(Detached)' | wc -l) -gt 0 ]] && symbols+="%{%F{green}%}%{%G⎚%}"
 
-  [[ -n "$symbols" ]] && prompt_segment 239 default "$symbols"
+  [[ -n "$symbols" ]] && prompt_segment 239 default "$symbols "
 }
 
 # LAN address

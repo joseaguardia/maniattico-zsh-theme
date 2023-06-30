@@ -1,4 +1,4 @@
-#Version 20230630
+#Version 20230630b
 
 . ~/.oh-my-zsh/themes/maniattico.zsh-theme.cfg
 
@@ -146,7 +146,7 @@ prompt_status() {
   #symbols+="%{%F{red}%}%{%G %}"
   #[[ $ALERTA -eq 1 ]] && symbols+="%{%F{red}%}%{%G⚠️ %}"
   [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}%{%G⮿%}"
-  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{red}%}%{%G⮔%}"
+  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}%{%G⮔%}"
   [[ $SCREEN = "1" ]] && [[ $(screen -ls | grep '(Detached)' | wc -l) -gt 0 ]] && symbols+="%{%F{green}%}%{%G⎚%}"
 
   [[ -n "$symbols" ]] && prompt_segment 239 default "$symbols "

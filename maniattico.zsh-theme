@@ -145,7 +145,7 @@ prompt_status() {
   symbols+=""
   #symbols+="%{%F{red}%}%{%G %}"
   #[[ $ALERTA -eq 1 ]] && symbols+="%{%F{red}%}%{%G⚠️ %}"
-  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}%{%G⮿%}"
+  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}%{%G⌧%}"
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}%{%G⮔%}"
   [[ $SCREEN = "1" ]] && [[ $(screen -ls | grep '(Detached)' | wc -l) -gt 0 ]] && symbols+="%{%F{green}%}%{%G⎚%}"
 

@@ -28,7 +28,7 @@ esac
 # Special Powerline characters
 () {
   local LC_ALL="" LC_CTYPE="es_ES.UTF-8"
-  #Other separators: ◣ ◤ ░ ❯ \ue0b0
+  #Other separators: ◣ ◤ ◥ ░ ❯ \ue0b0
   
   SEGMENT_SEPARATOR=$'⟩'
   }
@@ -156,7 +156,7 @@ prompt_status() {
 local_ip() {
   LOCAL_ADDR="$(hostname -I | cut -d ' ' -f 1)"
   if [[ -z $LOCAL_ADDR ]]; then
-    prompt_segment 196 15 "📶❕ SIN CONEXIÓN"
+    prompt_segment 196 15 "🗦 🗱 🗧 "
   else
     prompt_segment 248 236 "$LOCAL_ADDR"
   fi

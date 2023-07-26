@@ -12,7 +12,7 @@
 
 
 If  **openVPN,WireGuard, FortiClient or Cisco Anyconnect connection** is established, it shows current IP address and icons and background color for each of them.
-![image](https://github.com/joseaguardia/maniattico-zsh-theme/assets/16305835/a6f2bb30-66d0-483e-94f7-b4e119c9b640)
+![image](https://github.com/joseaguardia/maniattico-zsh-theme/assets/16305835/cba435a5-0c84-4f35-a3c9-26c4f5a7a47e)
 
 
 **Docker**: with the docker service running, it shows the containers that are started and stopped

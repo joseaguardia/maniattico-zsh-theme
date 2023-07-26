@@ -1,4 +1,4 @@
-#Version 20230630b
+#Version 20230726
 
 . ~/.oh-my-zsh/themes/maniattico.zsh-theme.cfg
 
@@ -68,10 +68,10 @@ prompt_segment() {
 
 # End the prompt, closing any open segments
 prompt_end() {
-  if [[ -n $CURRENT_BG ]]; then
+  if [[ -n $CURRENT_BG ]] && [[ $GRADIENT = "1" ]]; then
     echo -n " %{%k%F{$CURRENT_BG}%}▓▒░"
   else
-    echo -n "%{%k%}"
+    echo -n " %{%k%F{$CURRENT_BG}%}◣"
   fi
   echo -n "%{%f%}"
   CURRENT_BG=''
@@ -155,8 +155,11 @@ prompt_status() {
 # LAN address
 local_ip() {
   LOCAL_ADDR="$(hostname -I | cut -d ' ' -f 1)"
-  [[ -z $LOCAL_ADDR ]] && LOCAL_ADDR="🌍❗"
-  prompt_segment 248 236 "$LOCAL_ADDR"
+  if [[ -z $LOCAL_ADDR ]]; then
+    prompt_segment 196 15 "📶❕ SIN CONEXIÓN"
+  else
+    prompt_segment 248 236 "$LOCAL_ADDR"
+  fi
 }
 
 # Environment name
@@ -173,7 +176,7 @@ dockerCount() {
 
 # Detects connection to openVPN, wireguard and forticlient and shows the IP of the tunnel
 openvpn_status() {    
-    openvpn="$(ip a | grep 'tun0$' | xargs)"
+    openvpn="$(ip a | grep ' tun0$' | xargs)"
     if [[ $openvpn =~ "tun0" ]];then
       vpnIP="$(cut -d ' ' -f2 <<<$openvpn | cut -d '/' -f1)"
       prompt_segment 214 027 "%{%G🔌🔘%}$vpnIP"
@@ -194,6 +197,13 @@ forticlient_status() {
     fi
 }
 
+anyconnect_status() {    
+    cisco="$(ip a | grep 'cscotun0$' | xargs)"
+    if [[ $cisco =~ "cscotun0" ]];then
+      ciscoIP="$(cut -d ' ' -f2 <<<$cisco | cut -d '/' -f1)"
+      prompt_segment 190 25 "%{%G🔌🌍%}$ciscoIP"
+    fi
+}
 
 metrics() {
 
@@ -222,12 +232,13 @@ build_prompt() {
   environment
   local_ip
   openvpn_status
+  anyconnect_status
   forticlient_status
   [[ $WIREGUARD = "1" ]] && wireguard_status
   [[ $SERVICIODOCKER = "1" ]] && dockerCount
   prompt_dir
   prompt_git
-  [[ $GRADIENT = "1" ]] && prompt_end
+  prompt_end
 }
 
 

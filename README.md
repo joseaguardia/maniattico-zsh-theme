@@ -22,7 +22,7 @@ To use it, you need to add the following line to ~/.zshrc:
 
 
 When **no local IP address** is detected, add icons instead of IP
-![image](https://github.com/joseaguardia/maniattico-zsh-theme/assets/16305835/80152b14-bdfa-47fb-87f5-05c0b2ad4dd7)
+![image](https://github.com/joseaguardia/maniattico-zsh-theme/assets/16305835/7fe3578b-4cc4-494e-8301-94f9e9a249bc)
 
 
 **Git** status, brach, and so on (lighter colours).

@@ -3,14 +3,16 @@
 ### ZSH theme for OhMyZSH, fork of 'agnoster'
 
 **General view**: hostname, IP, environment and pwd
-![captura1](https://github.com/joseaguardia/maniattico-zsh-theme/blob/master/images/zsh2_a.png?raw=true)
+![image](https://github.com/joseaguardia/maniattico-zsh-theme/assets/16305835/10b48d81-c8dc-4f3a-91c8-03c5e23d3376)
 
 
-**New icons** for last command status and background task
-![captura2](https://github.com/joseaguardia/maniattico-zsh-theme/blob/master/images/zsh2_b.png?raw=true)
 
-If  **openVPN or WireGuard connection** is established, it shows current IP address.
-![captura3](https://github.com/joseaguardia/maniattico-zsh-theme/blob/master/images/zsh2_c.png?raw=true)
+**New icons** for last command status and background task (also for screen terminals)
+![image](https://github.com/joseaguardia/maniattico-zsh-theme/assets/16305835/884815ce-4492-4f15-8c52-568c81c342e6)
+
+
+If  **openVPN,WireGuard, FortiClient or Cisco Anyconnect connection** is established, it shows current IP address and icons and background color for each of them.
+![image](https://github.com/joseaguardia/maniattico-zsh-theme/assets/16305835/a6f2bb30-66d0-483e-94f7-b4e119c9b640)
 
 
 **Docker**: with the docker service running, it shows the containers that are started and stopped
@@ -20,17 +22,19 @@ To use it, you need to add the following line to ~/.zshrc:
 
 
 When **no local IP address** is detected, add icons instead of IP
-![captura7](https://github.com/joseaguardia/maniattico-zsh-theme/blob/master/images/zsh2_g.png?raw=true)
+![image](https://github.com/joseaguardia/maniattico-zsh-theme/assets/16305835/80152b14-bdfa-47fb-87f5-05c0b2ad4dd7)
 
 
-**Git** status, brach, and so on.
-![captura8](https://github.com/joseaguardia/maniattico-zsh-theme/blob/master/images/zsh2_h.png?raw=true)
+**Git** status, brach, and so on (lighter colours).
+![image](https://github.com/joseaguardia/maniattico-zsh-theme/assets/16305835/cf283f9e-c70b-46a7-b433-85a8ac1f20a4)
 
 
-You can **disable the gradient** at the end of first prompt line:
-![captura5](https://github.com/joseaguardia/maniattico-zsh-theme/blob/master/images/zsh2_e.png?raw=true)
+
+You can **enable the gradient** at the end of first prompt line:
+![image](https://github.com/joseaguardia/maniattico-zsh-theme/assets/16305835/f3b8d4d5-b155-48a0-a767-3fa264ec621e)
 
 
 **Different colours** for every environment:
-![captura6](https://github.com/joseaguardia/maniattico-zsh-theme/blob/master/images/zsh2_f.png?raw=true)
+![image](https://github.com/joseaguardia/maniattico-zsh-theme/assets/16305835/fa2bf8f9-d27c-4454-88c8-567d0992afa6)
+
 

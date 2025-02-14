@@ -1,4 +1,6 @@
-#Version 20230726
+#Version 20250214
+
+#Necesaria la fuente nerd fonts: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip
 
 . ~/.oh-my-zsh/themes/maniattico.zsh-theme.cfg
 
@@ -100,7 +102,8 @@ prompt_git() {
   local PL_BRANCH_CHAR
   () {
     local LC_ALL="" LC_CTYPE="en_US.UTF-8"
-    PL_BRANCH_CHAR=$'\ue0a0'         # 
+    #PL_BRANCH_CHAR=$'\ue0a0'   
+    PL_BRANCH_CHAR=$'\ue725'  #nerd fonts      # 
   }
   local ref dirty mode repo_path
 
@@ -109,7 +112,7 @@ prompt_git() {
     dirty=$(parse_git_dirty)
     ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
     if [[ -n $dirty ]]; then
-      prompt_segment 211 black
+      prompt_segment 216 black
     else
       prompt_segment 191 $CURRENT_FG
     fi
@@ -122,18 +125,25 @@ prompt_git() {
       mode=" >R>"
     fi
 
+    #github icon
+    if git remote -v >/dev/null | grep -q "github.com"; then
+      GITHUB_ICON="\uf113"
+    else
+      GITHUB_ICON=""
+    fi
+
     setopt promptsubst
     autoload -Uz vcs_info
 
     zstyle ':vcs_info:*' enable git
     zstyle ':vcs_info:*' get-revision true
     zstyle ':vcs_info:*' check-for-changes true
-    zstyle ':vcs_info:*' stagedstr '✚'
-    zstyle ':vcs_info:*' unstagedstr '±'
+    zstyle ':vcs_info:*' stagedstr '\uf481'
+    zstyle ':vcs_info:*' unstagedstr '\uf4d0'
     zstyle ':vcs_info:*' formats ' %u%c'
     zstyle ':vcs_info:*' actionformats ' %u%c'
     vcs_info
-    echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
+    echo -n "${ref/refs\/heads\//$GITHUB_ICON$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
   fi
 }
 

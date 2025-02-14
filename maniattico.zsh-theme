@@ -191,7 +191,7 @@ wireguard_status() {
 }
 
 forticlient_status() {    
-    forticlient_conn="$(ip a | grep 'global vpn\|POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP' | awk '{print $2}' | cut -d '/' -f1)"
+    forticlient_conn="$(ip a | grep -iv "cscotun0" | grep 'global vpn\|POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP' | awk '{print $2}' | cut -d '/' -f1)"
     if [[ -n $forticlient_conn ]];then
       forticlient_ip="$(ip a | grep 'global vpn\|POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP' -A3 | grep inet | awk '{print $2}' | cut -d'/' -f1)"
       prompt_segment 045 254 "%{%G🔌🛡️%} $forticlient_ip"
@@ -206,23 +206,23 @@ anyconnect_status() {
     fi
 }
 
-metrics() {
+# metrics() {
 
-  #Right prompt
-  LOAD="$(w | grep 'load average:' | awk '{print $10}' | sed 's/,$//' | tr ',' '.')*100/$(nproc)"
-  PORCENTAJE_CPU="$(echo $LOAD | bc)"
-  DISCO=$(df -h / | awk '/\// {print $5}' | tr -d '%')
-  RAM_USADA="$(free -m | awk '/Memoria:/ {print $3}')"
-  RAM_TOTAL="$(free -m | awk '/Memoria:/ {print $2}')"
-  RAM=`echo "${RAM_USADA}*100/${RAM_TOTAL}" | bc`
+#   #Right prompt
+#   LOAD="$(w | grep 'load average:' | awk '{print $10}' | sed 's/,$//' | tr ',' '.')*100/$(nproc)"
+#   PORCENTAJE_CPU="$(echo $LOAD | bc)"
+#   DISCO=$(df -h / | awk '/\// {print $5}' | tr -d '%')
+#   RAM_USADA="$(free -m | awk '/Memoria:/ {print $3}')"
+#   RAM_TOTAL="$(free -m | awk '/Memoria:/ {print $2}')"
+#   RAM=`echo "${RAM_USADA}*100/${RAM_TOTAL}" | bc`
 
-  if [[ $PORCENTAJE_CPU -gt 75 ]] || [[ $DISCO -gt 95 ]] || [[ $RAM -gt 90 ]]; then
-    ALERTA=1
-  else
-    ALERTA=0
-  fi
+#   if [[ $PORCENTAJE_CPU -gt 75 ]] || [[ $DISCO -gt 95 ]] || [[ $RAM -gt 90 ]]; then
+#     ALERTA=1
+#   else
+#     ALERTA=0
+#   fi
 
-}
+# }
 
 
 ## Main prompt

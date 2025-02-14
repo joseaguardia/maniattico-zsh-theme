@@ -191,8 +191,9 @@ wireguard_status() {
 }
 
 forticlient_status() {    
-    forticlient_ip="$(ip a | grep 'global vpn' | awk '{print $2}' | cut -d '/' -f1)"
-    if [[ -n $forticlient_ip ]];then
+    forticlient_conn="$(ip a | grep 'global vpn\|POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP' | awk '{print $2}' | cut -d '/' -f1)"
+    if [[ -n $forticlient_conn ]];then
+      forticlient_ip="$(ip a | grep 'global vpn\|POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP' -A3 | grep inet | awk '{print $2}' | cut -d'/' -f1)"
       prompt_segment 045 254 "%{%G🔌🛡️%} $forticlient_ip"
     fi
 }

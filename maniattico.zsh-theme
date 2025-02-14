@@ -109,7 +109,7 @@ prompt_git() {
     dirty=$(parse_git_dirty)
     ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
     if [[ -n $dirty ]]; then
-      prompt_segment 206 black
+      prompt_segment 211 black
     else
       prompt_segment 191 $CURRENT_FG
     fi

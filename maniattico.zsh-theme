@@ -1,8 +1,8 @@
-#Version 20250214
+#Version 20250215
 
 #Requisitos:
 #Fuente nerd fonts: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip
-# Est ecrontab para la info de docker:
+# Este crontab para la info de docker:
 # */3 7-23,0 * * * /usr/bin/docker info | grep 'Running:\|Stopped:' | tr '\n' ' ' | sed "s/   / /g" | sed 's/Running: /⯈/' | sed 's/Stopped: /■/' > /tmp/docker.info
 
 . ~/.oh-my-zsh/themes/maniattico.zsh-theme.cfg
@@ -35,7 +35,7 @@ esac
   local LC_ALL="" LC_CTYPE="es_ES.UTF-8"
   #Other separators: ◣ ◤ ◥ ░ ❯ \ue0b0
   
-  SEGMENT_SEPARATOR=$'⟩'
+  SEGMENT_SEPARATOR='⟩'
   }
 
 
@@ -52,8 +52,7 @@ pastefinish() {
 zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
 
-#Detectamos si es ROOT o no
-  
+#Detectamos si es ROOT o no  
 [[ $UID -eq 0 ]] && ICONO_PROMPT="#" || ICONO_PROMPT='$'
 [[ -n $STY ]] && ICONO_PROMPT+="SCREEN"
 
@@ -85,8 +84,10 @@ prompt_end() {
 
 prompt_context() {
   if [[ -n "$SSH_CLIENT" ]]; then
+    prompt_segment $ENVIRONMENT_COLOUR black "%(!.%{%F{white}%}.)$LINUX_DISTRO$SEGMENT_SEPARATOR"
     prompt_segment $ENVIRONMENT_COLOUR white "%(!.%{%F{white}%}.)☁️ $HOST"
   else
+    prompt_segment $ENVIRONMENT_COLOUR black "%(!.%{%F{white}%}.)$LINUX_DISTRO$SEGMENT_SEPARATOR"
     prompt_segment $ENVIRONMENT_COLOUR white "%(!.%{%F{white}%}.)$HOST"
   fi
 }
@@ -94,7 +95,7 @@ prompt_context() {
 # Dir: current working directory
 prompt_dir() {
   #prompt_segment 159 $CURRENT_FG '⎘ %~ '
-  prompt_segment 159 $CURRENT_FG '\uf114%~ '
+  prompt_segment 159 $CURRENT_FG '\uf114%~'
 }
 
 
@@ -109,7 +110,7 @@ prompt_git() {
   () {
     local LC_ALL="" LC_CTYPE="en_US.UTF-8"
     #PL_BRANCH_CHAR=$'\ue0a0'   
-    PL_BRANCH_CHAR=$'\ue725'  #nerd fonts      # 
+    PL_BRANCH_CHAR=$'\ue725'  #nerd fonts
   }
   local ref dirty mode repo_path
 
@@ -180,13 +181,12 @@ local_ip() {
 
 # Environment name
 environment() {
-    #[[ -z $ENVIRONMENT ]] || prompt_segment $ENVIRONMENT_COLOUR white "$ENVIRONMENT$EXTRA_INFO"
     [[ -z $EXTRA_INFO ]] || prompt_segment $ENVIRONMENT_COLOUR white "$EXTRA_INFO"
 }
 
 # Get count of running or stopped docker's containers 
 dockerCount() {
-    prompt_segment 027 045 "%{%G📦%}$(cat /tmp/docker.info)"
+    prompt_segment 027 045 "%{%G󰆧%}$(cat /tmp/docker.info)"
 }
 
 

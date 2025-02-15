@@ -1,6 +1,9 @@
 #Version 20250214
 
-#Necesaria la fuente nerd fonts: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip
+#Requisitos:
+#Fuente nerd fonts: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip
+# Est ecrontab para la info de docker:
+# */3 7-23,0 * * * /usr/bin/docker info | grep 'Running:\|Stopped:' | tr '\n' ' ' | sed "s/   / /g" | sed 's/Running: /⯈/' | sed 's/Stopped: /■/' > /tmp/docker.info
 
 . ~/.oh-my-zsh/themes/maniattico.zsh-theme.cfg
 
@@ -81,14 +84,17 @@ prompt_end() {
 
 
 prompt_context() {
-  if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    prompt_segment $ENVIRONMENT_COLOUR 236 "%(!.%{%F{white}%}.)$HOST"
+  if [[ -n "$SSH_CLIENT" ]]; then
+    prompt_segment $ENVIRONMENT_COLOUR white "%(!.%{%F{white}%}.)☁️ $HOST"
+  else
+    prompt_segment $ENVIRONMENT_COLOUR white "%(!.%{%F{white}%}.)$HOST"
   fi
 }
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment 159 $CURRENT_FG '⎘ %~ '
+  #prompt_segment 159 $CURRENT_FG '⎘ %~ '
+  prompt_segment 159 $CURRENT_FG '\uf114%~ '
 }
 
 
@@ -180,7 +186,7 @@ environment() {
 
 # Get count of running or stopped docker's containers 
 dockerCount() {
-    prompt_segment 027 045 "%{%G🐋%}$(docker info|  grep 'Running:\|Stopped:' | tr \\n ' ' | sed 's/   / /g' | sed 's/Running: /⯈ /' | sed 's/Stopped:/ ■/')"
+    prompt_segment 027 045 "%{%G📦%}$(cat /tmp/docker.info)"
 }
 
 
@@ -263,3 +269,4 @@ $(prompt_segment null 243 "%n")$(prompt_segment null $ENVIRONMENT_COLOUR "$ICONO
 #Aliases and other configurations
 alias vi='vim'
 bindkey \^U backward-kill-line
+

@@ -97,7 +97,7 @@ prompt_context() {
 # Dir: current working directory
 prompt_dir() {
   #prompt_segment 159 $CURRENT_FG '⎘ %~ '
-  prompt_segment 159 $CURRENT_FG '\uf114%~'
+  prompt_segment 159 $CURRENT_FG '\uf114 %~'
 }
 
 
@@ -121,7 +121,7 @@ prompt_git() {
     dirty=$(parse_git_dirty)
     ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
     if [[ -n $dirty ]]; then
-      prompt_segment 216 black
+      prompt_segment 197 white
     else
       prompt_segment 191 $CURRENT_FG
     fi
@@ -166,7 +166,7 @@ prompt_status() {
   #symbols+="%{%F{red}%}%{%G %}"
   #[[ $ALERTA -eq 1 ]] && symbols+="%{%F{red}%}%{%G⚠️ %}"
   [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}%{%G⌧%}"
-  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}%{%G⮔%}"
+  [[ $(ps --no-headers -o pid --ppid=$$ | wc -l) -gt 1 ]] && symbols+="%{%F{cyan}%}%{%G⮔%}"
   [[ $SCREEN = "1" ]] && [[ $(screen -ls | grep '(Detached)' | wc -l) -gt 0 ]] && symbols+="%{%F{green}%}%{%G⎚%}"
 
   [[ -n "$symbols" ]] && prompt_segment 239 default "$symbols "

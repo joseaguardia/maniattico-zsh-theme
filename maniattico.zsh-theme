@@ -126,6 +126,8 @@ prompt_git() {
       prompt_segment 191 $CURRENT_FG
     fi
 
+    CLEAN_ICON="\uf00c"
+
     if [[ -e "${repo_path}/BISECT_LOG" ]]; then
       mode=" <B>"
     elif [[ -e "${repo_path}/MERGE_HEAD" ]]; then
@@ -153,7 +155,13 @@ prompt_git() {
     zstyle ':vcs_info:*' actionformats ' %u%c'
     
     vcs_info
-    echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR $GITHUB_ICON }${vcs_info_msg_0_%% }${mode}"
+    
+    # Agregar icono solo si está clean
+    local clean_indicator=""
+    [[ -z $dirty ]] && clean_indicator=" $CLEAN_ICON"
+
+
+    echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR $GITHUB_ICON }${vcs_info_msg_0_%% }$clean_indicator${mode}"
   fi
 }
 

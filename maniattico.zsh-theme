@@ -1,11 +1,13 @@
-#Version 20250215
+#Version 20250216
 
 #Requisitos:
 #Fuente nerd fonts: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip
 # Este crontab para la info de docker:
-# */3 7-23,0 * * * /usr/bin/docker info | grep 'Running:\|Stopped:' | tr '\n' ' ' | sed "s/   / /g" | sed 's/Running: /⯈/' | sed 's/Stopped: /■/' > /tmp/docker.info
+# */3 7-23,0 * * * /usr/bin/docker info | grep 'Running:\|Stopped:' | tr '\n' ' ' | sed "s/   / /g" | sed 's/Running: /󰧄/' | sed 's/Stopped: /󰦺/' | sed 's/^ //' > /tmp/docker.info
 
 . ~/.oh-my-zsh/themes/maniattico.zsh-theme.cfg
+#Autocompletado para archivos ocultos
+zstyle ':completion:*' file-patterns '%p(^.)' '*'
 
 #Comprobamos servicios para evitar errores
 /usr/bin/systemctl status docker > /dev/null 2> /dev/null && SERVICIODOCKER="1" || SERVICIODOCKER="0"
@@ -52,7 +54,7 @@ pastefinish() {
 zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
 
-#Detectamos si es ROOT o no  
+#Detectamos si el usuario es ROOT o no  
 [[ $UID -eq 0 ]] && ICONO_PROMPT="#" || ICONO_PROMPT='$'
 [[ -n $STY ]] && ICONO_PROMPT+="SCREEN"
 
@@ -134,7 +136,7 @@ prompt_git() {
 
     #github icon
     if git remote -v >/dev/null | grep -q "github.com"; then
-      GITHUB_ICON="\uf113"
+      GITHUB_ICON="\ueb00"
     else
       GITHUB_ICON=""
     fi
@@ -149,8 +151,9 @@ prompt_git() {
     zstyle ':vcs_info:*' unstagedstr '\uf4d0'
     zstyle ':vcs_info:*' formats ' %u%c'
     zstyle ':vcs_info:*' actionformats ' %u%c'
+    
     vcs_info
-    echo -n "${ref/refs\/heads\//$GITHUB_ICON$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
+    echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR $GITHUB_ICON }${vcs_info_msg_0_%% }${mode}"
   fi
 }
 
@@ -186,7 +189,7 @@ environment() {
 
 # Get count of running or stopped docker's containers 
 dockerCount() {
-    prompt_segment 027 045 "%{%G󰆧%}$(cat /tmp/docker.info)"
+    prompt_segment 027 045 "%{%G\ueef6%}$(cat /tmp/docker.info)"
 }
 
 
@@ -261,7 +264,7 @@ build_prompt() {
 
 # Write the prompt (two lines)
 PROMPT='
-%{ %f%b%k%}$(build_prompt) '
+%{ %f%b%k%}$(build_prompt)'
 PROMPT+='
 $(prompt_segment null 243 "%n")$(prompt_segment null $ENVIRONMENT_COLOUR "$ICONO_PROMPT ")'
 

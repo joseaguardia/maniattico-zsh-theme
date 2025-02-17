@@ -1,4 +1,4 @@
-#Version 20250216
+#Version 20250217
 
 #Requisitos:
 #Fuente nerd fonts: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip
@@ -108,26 +108,38 @@ prompt_git() {
   if [[ "$(git config --get oh-my-zsh.hide-status 2>/dev/null)" = 1 ]]; then
     return
   fi
-  local PL_BRANCH_CHAR
-  () {
-    local LC_ALL="" LC_CTYPE="en_US.UTF-8"
-    #PL_BRANCH_CHAR=$'\ue0a0'   
-    PL_BRANCH_CHAR=$'\ue725'  #nerd fonts
-  }
-  local ref dirty mode repo_path
 
-   if [[ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ]]; then
+  local PL_BRANCH_CHAR=$'\ue725'  # Icono de rama Git (Nerd Fonts)
+  local ref staged unstaged dirty_icons mode repo_path
+
+  if [[ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ]]; then
     repo_path=$(git rev-parse --git-dir 2>/dev/null)
-    dirty=$(parse_git_dirty)
+
+    #Contamos el número en cada estado
+    staged_count=$(git diff --cached --name-only | wc -l)  
+    unstaged_count=$( (git ls-files --others --exclude-standard; git diff --name-only) | wc -l)
+
+    # Detección manual de cambios staged y unstaged
+    staged=""
+    unstaged=""
+    [[ -n $(git diff --cached --name-only) ]] && staged=" $staged_count\uf481"   # Icono si hay archivos staged
+    [[ -n $(git ls-files --others --exclude-standard) || -n $(git diff --name-only) ]] && unstaged=" $unstaged_count\uf4d0"  # Icono si hay archivos sin seguimiento o modificados
+
+    # Concatenar ambos iconos si existen
+    dirty_icons="${unstaged}${staged}"
+
     ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
-    if [[ -n $dirty ]]; then
+
+    # Definir color del segmento si hay cambios
+    if [[ -n $dirty_icons ]]; then
       prompt_segment 197 white
     else
       prompt_segment 191 $CURRENT_FG
     fi
 
+    # Icono check si el repositorio está limpio
     CLEAN_ICON="\uf00c"
-
+    
     if [[ -e "${repo_path}/BISECT_LOG" ]]; then
       mode=" <B>"
     elif [[ -e "${repo_path}/MERGE_HEAD" ]]; then
@@ -136,34 +148,21 @@ prompt_git() {
       mode=" >R>"
     fi
 
-    #github icon
-    if git remote -v >/dev/null | grep -q "github.com"; then
-      GITHUB_ICON="\ueb00"
-    else
-      GITHUB_ICON=""
+    # Icono de GitHub si el repo tiene remotos en GitHub
+    local GITHUB_ICON=""
+    if git remote -v | grep -q "github.com"; then
+      GITHUB_ICON="\ueb00 "
     fi
 
-    setopt promptsubst
-    autoload -Uz vcs_info
-
-    zstyle ':vcs_info:*' enable git
-    zstyle ':vcs_info:*' get-revision true
-    zstyle ':vcs_info:*' check-for-changes true
-    zstyle ':vcs_info:*' stagedstr '\uf481'
-    zstyle ':vcs_info:*' unstagedstr '\uf4d0'
-    zstyle ':vcs_info:*' formats ' %u%c'
-    zstyle ':vcs_info:*' actionformats ' %u%c'
-    
-    vcs_info
-    
-    # Agregar icono solo si está clean
+    # Si no hay cambios, mostrar icono de repositorio limpio
     local clean_indicator=""
-    [[ -z $dirty ]] && clean_indicator=" $CLEAN_ICON"
+    [[ -z $dirty_icons ]] && clean_indicator=" $CLEAN_ICON"
 
-
-    echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR $GITHUB_ICON }${vcs_info_msg_0_%% }$clean_indicator${mode}"
+    echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR $GITHUB_ICON}$dirty_icons$clean_indicator$mode"
   fi
 }
+
+
 
 
 # status icons

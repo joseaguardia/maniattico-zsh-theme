@@ -4,7 +4,7 @@
 
 New set of icons and small adjustments, and the Linux distro icon is added.
 Now detects if it is a github repository and adds the icon.
-Also you are in an ssh connection, it adds a cloud image to the host name
+Also if you are in an ssh connection, it adds a cloud image to the host name
 
 ![image](https://github.com/user-attachments/assets/22732156-0719-44a5-8102-7ae9839326e8)
 

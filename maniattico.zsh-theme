@@ -273,7 +273,7 @@ build_prompt() {
 PROMPT='
 %{ %f%b%k%}$(build_prompt)'
 PROMPT+='
-$(prompt_segment null 243 "%n")$(prompt_segment null $ENVIRONMENT_COLOUR "$ICONO_PROMPT ")'
+$(prompt_segment null 243 "$SEGMENT_SEPARATOR")$(prompt_segment null $ENVIRONMENT_COLOUR "$ICONO_PROMPT ")'
 
 
 #Aliases and other configurations

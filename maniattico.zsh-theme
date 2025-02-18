@@ -1,4 +1,4 @@
-#Version 20250217
+#Version 20250218
 
 #Requisitos:
 #Fuente nerd fonts: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip
@@ -141,11 +141,11 @@ prompt_git() {
     CLEAN_ICON="\uf00c"
     
     if [[ -e "${repo_path}/BISECT_LOG" ]]; then
-      mode=" <B>"
+      mode=" <󰫯>"
     elif [[ -e "${repo_path}/MERGE_HEAD" ]]; then
-      mode=" >M<"
+      mode=" ><"
     elif [[ -e "${repo_path}/rebase" || -e "${repo_path}/rebase-apply" || -e "${repo_path}/rebase-merge" || -e "${repo_path}/../.dotest" ]]; then
-      mode=" >R>"
+      mode=" >󰫿>"
     fi
 
     # Icono de GitHub si el repo tiene remotos en GitHub

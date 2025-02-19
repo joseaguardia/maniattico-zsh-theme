@@ -107,14 +107,23 @@ prompt_git() {
     repo_path=$(git rev-parse --git-dir 2>/dev/null)
 
     #Contamos el número en cada estado
-    staged_count=$(git diff --cached --name-only | wc -l)  
-    unstaged_count=$( (git ls-files --others --exclude-standard; git diff --name-only) | wc -l)
-
-    # Detección manual de cambios staged y unstaged
+    dirty_icons=""
     staged=""
     unstaged=""
-    [[ -n $(git diff --cached --name-only) ]] && staged=" $staged_count\uf481"   # Icono si hay archivos staged
-    [[ -n $(git ls-files --others --exclude-standard) || -n $(git diff --name-only) ]] && unstaged=" $unstaged_count\uf4d0"  # Icono si hay archivos sin seguimiento o modificados
+    
+    git_status=$(git status --porcelain)
+    if [[ -n $git_status ]]; then
+        staged_count=$(echo "$git_status" | grep -c '^[AM]')
+        unstaged_count=$(echo "$git_status" | grep -c '^[?]')
+    else
+        staged_count=0
+        unstaged_count=0
+    fi
+
+    # Detección manual de cambios staged y unstaged
+    
+    [[ "$staged_count" -gt 0 ]] && staged=" $staged_count\uf481"   # Icono si hay archivos staged
+    [[ "$unstaged_count" -gt 0 ]] && unstaged=" $unstaged_count\uf4d0"  # Icono si hay archivos sin seguimiento o modificados
 
     # Concatenar ambos iconos si existen
     dirty_icons="${unstaged}${staged}"

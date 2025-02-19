@@ -1,4 +1,4 @@
-#Version 20250218
+#Version 20250219
 
 #Requisitos:
 #Fuente nerd fonts: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip
@@ -47,8 +47,8 @@ pastefinish() {
 zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
 
-#Detectamos si el usuario es root o no  
-[[ $UID -eq 0 ]] && ICONO_PROMPT="root#" || ICONO_PROMPT=''
+#Detectamos si el usuario es root o no, con cambio de prompt y color en cada caso  
+[[ $UID -eq 0 ]] && ICONO_PROMPT="%F{$ENVIRONMENT_COLOUR}root#%f" || ICONO_PROMPT='%F{15}%f'
 [[ -n $STY ]] && ICONO_PROMPT+="SCREEN"
 
 # Begin a segment
@@ -256,7 +256,7 @@ build_prompt() {
 PROMPT='
 %{ %f%b%k%}$(build_prompt)'
 PROMPT+='
- %F{15}$ICONO_PROMPT%f '
+ $ICONO_PROMPT '
 
 
 #Aliases and other configurations

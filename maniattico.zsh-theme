@@ -5,14 +5,8 @@
 # Este crontab para la info de docker:
 # */3 7-23,0 * * * /usr/bin/docker info | grep 'Running:\|Stopped:' | tr '\n' ' ' | sed "s/   / /g" | sed 's/Running: /󰧄/' | sed 's/Stopped: /󰦺/' | sed 's/^ //' > /tmp/docker.info
 
+#Cargamos la config del archivo de config
 . ~/.oh-my-zsh/themes/maniattico.zsh-theme.cfg
-#Autocompletado para archivos ocultos
-zstyle ':completion:*' file-patterns '%p(^.)' '*'
-
-#Comprobamos servicios para evitar errores
-/usr/bin/systemctl status docker > /dev/null 2> /dev/null && SERVICIODOCKER="1" || SERVICIODOCKER="0"
-wg-quick -h > /dev/null 2> /dev/null && WIREGUARD="1" || WIREGUARD="0"
-screen -h > /dev/null 2> /dev/null && SCREEN="1" || SCREEN="0"
 
 #Auto-upgrade
 DISABLE_UPDATE_PROMPT=true
@@ -32,17 +26,15 @@ case ${SOLARIZED_THEME:-dark} in
     *)     CURRENT_FG='black';;
 esac
 
-# Special Powerline characters
+# Special characters
 () {
   local LC_ALL="" LC_CTYPE="es_ES.UTF-8"
   #Other separators: ◣ ◤ ◥ ░ ❯ \ue0b0
-  
   SEGMENT_SEPARATOR='⟩'
   }
 
 
-# This speeds up pasting w/ autosuggest
-# https://github.com/zsh-users/zsh-autosuggestions/issues/238
+# This speeds up pasting w/ autosuggest: https://github.com/zsh-users/zsh-autosuggestions/issues/238
 pasteinit() {
   OLD_SELF_INSERT=${${(s.:.)widgets[self-insert]}[2,3]}
   zle -N self-insert url-quote-magic # I wonder if you'd need `.url-quote-magic`?
@@ -51,6 +43,7 @@ pasteinit() {
 pastefinish() {
   zle -N self-insert $OLD_SELF_INSERT
 }
+
 zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
 
@@ -96,10 +89,8 @@ prompt_context() {
 
 # Dir: current working directory
 prompt_dir() {
-  #prompt_segment 159 $CURRENT_FG '⎘ %~ '
   prompt_segment 159 $CURRENT_FG '\uf114 %~'
 }
-
 
 
 # Git: branch/detached head, dirty status
@@ -141,11 +132,11 @@ prompt_git() {
     CLEAN_ICON="\uf00c"
     
     if [[ -e "${repo_path}/BISECT_LOG" ]]; then
-      mode=" <󰫯>"
+      mode=" <󰫯>" #B
     elif [[ -e "${repo_path}/MERGE_HEAD" ]]; then
-      mode=" ><"
+      mode=" ><" #M
     elif [[ -e "${repo_path}/rebase" || -e "${repo_path}/rebase-apply" || -e "${repo_path}/rebase-merge" || -e "${repo_path}/../.dotest" ]]; then
-      mode=" >󰫿>"
+      mode=" >󰫿>" #R
     fi
 
     # Icono de GitHub si el repo tiene remotos en GitHub
@@ -168,26 +159,15 @@ prompt_git() {
 # status icons
 prompt_status() {
   local -a symbols
-  #metrics
   symbols+=""
-  #symbols+="%{%F{red}%}%{%G %}"
-  #[[ $ALERTA -eq 1 ]] && symbols+="%{%F{red}%}%{%G⚠️ %}"
   [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}%{%G⌧%}"
   [[ $(ps --no-headers -o pid --ppid=$$ | wc -l) -gt 1 ]] && symbols+="%{%F{cyan}%}%{%G⮔%}"
-  [[ $SCREEN = "1" ]] && [[ $(screen -ls | grep '(Detached)' | wc -l) -gt 0 ]] && symbols+="%{%F{green}%}%{%G⎚%}"
+  [[ $SCREEN = "y" ]] && [[ $(screen -ls | grep '(Detached)' | wc -l) -gt 0 ]] && symbols+="%{%F{green}%}%{%G⎚%}"
 
   [[ -n "$symbols" ]] && prompt_segment 239 default "$symbols "
 }
 
-# LAN address
-local_ip() {
-  LOCAL_ADDR="$(hostname -I | cut -d ' ' -f 1)"
-  if [[ -z $LOCAL_ADDR ]]; then
-    prompt_segment 196 15 "🗦 🗱 🗧 "
-  else
-    prompt_segment 248 236 "$LOCAL_ADDR"
-  fi
-}
+
 
 # Environment name
 environment() {
@@ -199,10 +179,23 @@ dockerCount() {
     prompt_segment 027 045 "%{%G\ueef6%}$(cat /tmp/docker.info)"
 }
 
+#Guardamos los datos de red para usarlo en varias comprobaciones
+/usr/sbin/ip a > /tmp/ip.a
+LAN_IFACE="$(ip route | grep default | awk '{print $5}')"
+
+# LAN address
+local_ip() {
+  LOCAL_ADDR="$(grep "$LAN_IFACE" /tmp/ip.a | grep -v "${LAN_IFACE}:" | awk '{print $2}' | cut -d '/' -f1)"
+  if [[ -z $LOCAL_ADDR ]]; then
+    prompt_segment 196 15 "🗦 🗱 🗧 "
+  else
+    prompt_segment 248 236 "$LOCAL_ADDR"
+  fi
+}
 
 # Detects connection to openVPN, wireguard and forticlient and shows the IP of the tunnel
 openvpn_status() {    
-    openvpn="$(ip a | grep ' tun0$' | xargs)"
+    openvpn="$(grep ' tun0$' /tmp/ip.a | xargs)"
     if [[ $openvpn =~ "tun0" ]];then
       vpnIP="$(cut -d ' ' -f2 <<<$openvpn | cut -d '/' -f1)"
       prompt_segment 214 027 "%{%G🔌🔘%}$vpnIP"
@@ -217,7 +210,7 @@ wireguard_status() {
 }
 
 forticlient_status() {    
-    forticlient_conn="$(ip a | grep -iv "cscotun0" | grep 'global vpn\|POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP' | awk '{print $2}' | cut -d '/' -f1)"
+    forticlient_conn="$(grep -iv "cscotun0" /tmp/ip.a | grep 'global vpn\|POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP' | awk '{print $2}' | cut -d '/' -f1)"
     if [[ -n $forticlient_conn ]];then
       forticlient_ip="$(ip a | grep 'global vpn\|POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP' -A3 | grep inet | awk '{print $2}' | cut -d'/' -f1)"
       prompt_segment 045 254 "%{%G🔌🛡️%} $forticlient_ip"
@@ -225,31 +218,12 @@ forticlient_status() {
 }
 
 anyconnect_status() {    
-    cisco="$(ip a | grep 'cscotun0$' | xargs)"
+    cisco="$(grep 'cscotun0$' /tmp/ip.a | xargs)"
     if [[ $cisco =~ "cscotun0" ]];then
       ciscoIP="$(cut -d ' ' -f2 <<<$cisco | cut -d '/' -f1)"
       prompt_segment 190 25 "%{%G🔌🌍%}$ciscoIP"
     fi
 }
-
-# metrics() {
-
-#   #Right prompt
-#   LOAD="$(w | grep 'load average:' | awk '{print $10}' | sed 's/,$//' | tr ',' '.')*100/$(nproc)"
-#   PORCENTAJE_CPU="$(echo $LOAD | bc)"
-#   DISCO=$(df -h / | awk '/\// {print $5}' | tr -d '%')
-#   RAM_USADA="$(free -m | awk '/Memoria:/ {print $3}')"
-#   RAM_TOTAL="$(free -m | awk '/Memoria:/ {print $2}')"
-#   RAM=`echo "${RAM_USADA}*100/${RAM_TOTAL}" | bc`
-
-#   if [[ $PORCENTAJE_CPU -gt 75 ]] || [[ $DISCO -gt 95 ]] || [[ $RAM -gt 90 ]]; then
-#     ALERTA=1
-#   else
-#     ALERTA=0
-#   fi
-
-# }
-
 
 ## Main prompt
 build_prompt() {
@@ -258,11 +232,11 @@ build_prompt() {
   prompt_context
   environment
   local_ip
-  openvpn_status
-  anyconnect_status
-  forticlient_status
-  [[ $WIREGUARD = "1" ]] && wireguard_status
-  [[ $SERVICIODOCKER = "1" ]] && dockerCount
+  [[ $OPENVPN = "y" ]] && openvpn_status
+  [[ $ANYCONNECT = "y" ]] && anyconnect_status
+  [[ $FORTICLIENT = "y" ]] && forticlient_status
+  [[ $WIREGUARD = "y" ]] && wireguard_status
+  [[ $DOCKER = "y" ]] && dockerCount
   prompt_dir
   prompt_git
   prompt_end
@@ -280,3 +254,5 @@ $(prompt_segment null 243 "$SEGMENT_SEPARATOR")$(prompt_segment null $ENVIRONMEN
 alias vi='vim'
 bindkey \^U backward-kill-line
 
+#Autocompletado para archivos ocultos
+zstyle ':completion:*' file-patterns '%p(^.)' '*'

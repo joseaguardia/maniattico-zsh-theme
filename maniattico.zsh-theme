@@ -47,8 +47,8 @@ pastefinish() {
 zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
 
-#Detectamos si el usuario es ROOT o no  
-[[ $UID -eq 0 ]] && ICONO_PROMPT="#" || ICONO_PROMPT='$'
+#Detectamos si el usuario es root o no  
+[[ $UID -eq 0 ]] && ICONO_PROMPT="root#" || ICONO_PROMPT=''
 [[ -n $STY ]] && ICONO_PROMPT+="SCREEN"
 
 # Begin a segment
@@ -256,7 +256,7 @@ build_prompt() {
 PROMPT='
 %{ %f%b%k%}$(build_prompt)'
 PROMPT+='
-$(prompt_segment null 243 "$SEGMENT_SEPARATOR")$(prompt_segment null $ENVIRONMENT_COLOUR "$ICONO_PROMPT ")'
+ %F{15}$ICONO_PROMPT%f '
 
 
 #Aliases and other configurations

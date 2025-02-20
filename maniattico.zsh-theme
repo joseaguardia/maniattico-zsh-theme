@@ -149,16 +149,21 @@ prompt_git() {
     fi
 
     # Icono de GitHub si el repo tiene remotos en GitHub
-    local GITHUB_ICON=""
+    local GIT_ICON=""
     if git remote -v | grep -q "github.com"; then
-      GITHUB_ICON="\ueb00 "
+      GIT_ICON="\ueb00 "
     fi
+    # Icono de Gitlab si el repo tiene remotos en Gitlab
+    if git remote -v | grep -q "gitlab"; then
+      GIT_ICON="\Uf0ba0 "
+    fi
+
 
     # Si no hay cambios, mostrar icono de repositorio limpio
     local clean_indicator=""
     [[ -z $dirty_icons ]] && clean_indicator=" $CLEAN_ICON"
 
-    echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR $GITHUB_ICON}$dirty_icons$clean_indicator$mode"
+    echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR $GIT_ICON}$dirty_icons$clean_indicator$mode"
   fi
 }
 
@@ -261,6 +266,14 @@ PROMPT+='
 
 #Aliases and other configurations
 alias vi='vim'
+alias dps='docker ps --format "table {{.Names}}\t{{.ID}}\t{{.Status}}\t{{.Ports}}" | sed "s/0.0.0.0://g" | sed "s/::://g" | docker-color-output'
+alias dpsa='docker ps -a --format "table {{.Names}}\t{{.ID}}\t{{.Status}}\t{{.Ports}}" | sed "s/0.0.0.0://g" | sed "s/::://g" | docker-color-output'
+alias cat='bat -pp'
+alias paw='cd ~/PROYECTOS/PAW/paw-master-digital; nix develop'
+alias r=ranger
+
+export EDITOR=vim
+export VISUAL=vim
 bindkey \^U backward-kill-line
 
 #Autocompletado para archivos ocultos

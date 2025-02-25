@@ -111,12 +111,12 @@ prompt_git() {
     staged=""
     unstaged=""
     deleted=""
-    
+     
     git_status=$(git status --porcelain)
     if [[ -n $git_status ]]; then
-        staged_count=$(echo "$git_status" | grep -c '^[AM]')
-        unstaged_count=$(echo "$git_status" | grep -c '^[?]')
-        deleted_count=$(echo "$git_status" | grep -c '^\s*D')
+      unstaged_count=$(echo "$git_status" | grep -c '^??')
+      staged_count=$(echo "$git_status" | grep -cE '^[AM]')
+      deleted_count=$(echo "$git_status" | grep -cE '^D| D')
     else
         staged_count=0
         unstaged_count=0
@@ -124,7 +124,6 @@ prompt_git() {
     fi
 
     # Detección manual de cambios staged y unstaged
-    
     [[ "$staged_count" -gt 0 ]] && staged=" $staged_count\Uf0b97"   # Icono si hay archivos staged
     [[ "$unstaged_count" -gt 0 ]] && unstaged=" $unstaged_count\uf4d0"  # Icono si hay archivos sin seguimiento o modificados
     [[ "$deleted_count" -gt 0 ]] && deleted=" $deleted_count\uf4d6"  # Icono si hay archivos sin seguimiento o modificados

@@ -266,13 +266,6 @@ PROMPT+='
  $ICONO_PROMPT '
 
 
-#Aliases and other configurations
-alias vi='vim'
-alias dps='docker ps --format "table {{.Names}}\t{{.ID}}\t{{.Status}}\t{{.Ports}}" | sed "s/0.0.0.0://g" | sed "s/::://g" | docker-color-output'
-alias dpsa='docker ps -a --format "table {{.Names}}\t{{.ID}}\t{{.Status}}\t{{.Ports}}" | sed "s/0.0.0.0://g" | sed "s/::://g" | docker-color-output'
-alias cat='bat -pp'
-alias paw='cd ~/PROYECTOS/PAW/paw-master-digital; nix develop'
-alias r=ranger
 
 export EDITOR=vim
 export VISUAL=vim

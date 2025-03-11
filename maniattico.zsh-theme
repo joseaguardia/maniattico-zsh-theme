@@ -1,4 +1,4 @@
-#Version 20250310
+#Version 20250311
 
 #Requisitos:
 #Fuente nerd fonts: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip
@@ -114,8 +114,10 @@ prompt_git() {
      
     git_status=$(git status --porcelain)
     if [[ -n $git_status ]]; then
-      unstaged_count=$(echo "$git_status" | cut -c 1-2 | tr -cd '?' | wc -c)
+      unstaged_count=$(echo "$git_status" | cut -c 1 | tr -cd '?' | wc -c)
+      added_count=$(echo "$git_status" | cut -c 1-2 | tr -cd 'A' | wc -c)
       staged_count=$(echo "$git_status" | cut -c 1-2 | tr -cd 'M' | wc -c)
+      total_staged=$(echo $added_count+$staged_count | bc)
       deleted_count=$(echo "$git_status" | cut -c 1-2 | tr -cd 'D' | wc -c)
     else
         staged_count=0
@@ -125,7 +127,7 @@ prompt_git() {
 
     # Detección manual de cambios staged y unstaged
     
-    [[ "$staged_count" -gt 0 ]] && staged=" $staged_count\Uf0b97"   # Icono si hay archivos staged
+    [[ "$total_staged" -gt 0 ]] && staged=" $total_staged\Uf0b97"   # Icono si hay archivos staged
     [[ "$unstaged_count" -gt 0 ]] && unstaged=" $unstaged_count\uf4d0"  # Icono si hay archivos sin seguimiento o modificados
     [[ "$deleted_count" -gt 0 ]] && deleted=" $deleted_count\uf4d6"  # Icono si hay archivos sin seguimiento o modificados
     # Concatenar ambos iconos si existen

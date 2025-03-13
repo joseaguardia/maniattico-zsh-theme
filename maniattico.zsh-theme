@@ -143,22 +143,26 @@ else
 fi
 
 
-    # # Definir color del segmento si hay cambios
-    # if [[ -n $dirty_icons ]]; then
-    #   prompt_segment 197 white
-    # else
-    #   prompt_segment 191 $CURRENT_FG
-    # fi
 
-    # Definir color del segmento si hay cambios
+    # Definir color del segmento
     if [[ $HEADLESS -eq "1" ]]; then
-      prompt_segment 202 white
+      BACKCOLOR=202 #Naranja
+      FRONTCOLOR=white
     elif [[ -n $dirty_icons ]]; then
-      prompt_segment 197 white
-    else
-      prompt_segment 191 $CURRENT_FG
+      BACKCOLOR=197 #Rosa
+      FRONTCOLOR=white
+    else  # Todo correcto, sin cambios, dependiendo de si es main/master u otra rama
+      if [[ "$(cut -d '/' -f3 <<<$ref)" = "master" ]] ||  [[ "$(cut -d '/' -f3 <<<$ref)" = "main" ]] ; then
+        BACKCOLOR=191 #Verde brillante
+        FRONTCOLOR=$CURRENT_FG
+      else
+        BACKCOLOR=084 #Verde apagado
+        FRONTCOLOR=$CURRENT_FG
+      fi
     fi
 
+    # Generamos el prompt con los colores
+    prompt_segment $BACKCOLOR $FRONTCOLOR
 
     # Icono check si el repositorio está limpio
     CLEAN_ICON="\uf00c"

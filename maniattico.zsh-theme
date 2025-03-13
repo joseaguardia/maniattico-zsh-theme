@@ -159,10 +159,10 @@ fi
     else  # Todo correcto, sin cambios, dependiendo de si es main/master u otra rama
       if [[ "$(cut -d '/' -f3 <<<$ref)" = "master" ]] ||  [[ "$(cut -d '/' -f3 <<<$ref)" = "main" ]] ; then
         BACKCOLOR=190 #191Verde brillante
-        FRONTCOLOR=$CURRENT_FG
+        FRONTCOLOR=232
       else
         BACKCOLOR=048 #084Verde apagado
-        FRONTCOLOR=$CURRENT_FG
+        FRONTCOLOR=232
       fi
     fi
 
@@ -223,7 +223,7 @@ environment() {
 
 # Get count of running or stopped docker's containers 
 dockerCount() {
-    prompt_segment 027 045 "%{%G\ueef6%}$(cat /tmp/docker.info)"
+    prompt_segment 031 045 "%{%G\ueef6%}$(cat /tmp/docker.info)"
 }
 
 #Guardamos los datos de red para usarlo en varias comprobaciones
@@ -236,7 +236,7 @@ local_ip() {
   if [[ -z $LOCAL_ADDR ]]; then
     prompt_segment 196 15 "🗦 🗱 🗧 "
   else
-    prompt_segment 248 236 "$LOCAL_ADDR"
+    prompt_segment 247 239 "$LOCAL_ADDR"
   fi
 }
 

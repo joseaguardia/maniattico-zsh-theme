@@ -149,14 +149,19 @@ fi
       BACKCOLOR=202 #Naranja
       FRONTCOLOR=white
     elif [[ -n $dirty_icons ]]; then
-      BACKCOLOR=197 #Rosa
-      FRONTCOLOR=white
+      if [[ "$(cut -d '/' -f3 <<<$ref)" = "master" ]] ||  [[ "$(cut -d '/' -f3 <<<$ref)" = "main" ]] ; then
+        BACKCOLOR=197 #Rosa brillante
+        FRONTCOLOR=white
+      else 
+        BACKCOLOR=204 #Rosa apagado
+        FRONTCOLOR=white
+      fi
     else  # Todo correcto, sin cambios, dependiendo de si es main/master u otra rama
       if [[ "$(cut -d '/' -f3 <<<$ref)" = "master" ]] ||  [[ "$(cut -d '/' -f3 <<<$ref)" = "main" ]] ; then
-        BACKCOLOR=191 #Verde brillante
+        BACKCOLOR=190 #191Verde brillante
         FRONTCOLOR=$CURRENT_FG
       else
-        BACKCOLOR=084 #Verde apagado
+        BACKCOLOR=048 #084Verde apagado
         FRONTCOLOR=$CURRENT_FG
       fi
     fi

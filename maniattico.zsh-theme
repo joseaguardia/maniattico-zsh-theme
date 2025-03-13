@@ -1,9 +1,9 @@
-#Version 20250311
+#Version 20250312
 
 #Requisitos:
-#Fuente nerd fonts: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip
+# Fuente nerd fonts: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip
 # Este crontab para la info de docker:
-# */3 7-23,0 * * * /usr/bin/docker info | grep 'Running:\|Stopped:' | tr '\n' ' ' | sed "s/   / /g" | sed 's/Running: /󰧄/' | sed 's/Stopped: /󰦺/' | sed 's/^ //' > /tmp/docker.info
+# * 7-23,0 * * * /usr/bin/docker info | grep 'Running:\|Stopped:' | tr '\n' ' ' | sed "s/   / /g" | sed 's/Running: /󰧄/' | sed 's/Stopped: /󰦺/' | sed 's/^ //' > /tmp/docker.info
 
 #Cargamos la config del archivo de config
 . ~/.oh-my-zsh/themes/maniattico.zsh-theme.cfg
@@ -120,9 +120,9 @@ prompt_git() {
       total_staged=$(echo $added_count+$staged_count | bc)
       deleted_count=$(echo "$git_status" | cut -c 1-2 | tr -cd 'D' | wc -c)
     else
-        staged_count=0
-        unstaged_count=0
-        deleted_count=0
+      staged_count=0
+      unstaged_count=0
+      deleted_count=0
     fi
 
     # Detección manual de cambios staged y unstaged
@@ -133,14 +133,32 @@ prompt_git() {
     # Concatenar ambos iconos si existen
     dirty_icons="${staged}${unstaged}${deleted}"
 
-    ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
+    # ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="$PL_BRANCH_CHAR$GIT_ICON ➦ $(git rev-parse --short HEAD 2> /dev/null)"
+
+if ref=$(git symbolic-ref HEAD 2> /dev/null); then
+  HEADLESS="0"
+else
+  ref="$PL_BRANCH_CHAR$GIT_ICON $(git rev-parse --short HEAD 2> /dev/null)"
+  HEADLESS="1"
+fi
+
+
+    # # Definir color del segmento si hay cambios
+    # if [[ -n $dirty_icons ]]; then
+    #   prompt_segment 197 white
+    # else
+    #   prompt_segment 191 $CURRENT_FG
+    # fi
 
     # Definir color del segmento si hay cambios
-    if [[ -n $dirty_icons ]]; then
+    if [[ $HEADLESS -eq "1" ]]; then
+      prompt_segment 202 white
+    elif [[ -n $dirty_icons ]]; then
       prompt_segment 197 white
     else
       prompt_segment 191 $CURRENT_FG
     fi
+
 
     # Icono check si el repositorio está limpio
     CLEAN_ICON="\uf00c"
@@ -167,6 +185,7 @@ prompt_git() {
     # Si no hay cambios, mostrar icono de repositorio limpio
     local clean_indicator=""
     [[ -z $dirty_icons ]] && clean_indicator=" $CLEAN_ICON"
+    [[ $HEADLESS -eq "1" ]] && clean_indicator=" \Uf071c"
 
     echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR $GIT_ICON}$dirty_icons$clean_indicator$mode"
   fi

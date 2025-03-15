@@ -1,11 +1,11 @@
-#Version 20250312
+#Version 20250315
 
 #Requisitos:
 # Fuente nerd fonts: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip
 # Este crontab para la info de docker:
 # * 7-23,0 * * * /usr/bin/docker info | grep 'Running:\|Stopped:' | tr '\n' ' ' | sed "s/   / /g" | sed 's/Running: /󰧄/' | sed 's/Stopped: /󰦺/' | sed 's/^ //' > /tmp/docker.info
 
-#Cargamos la config del archivo de config
+#Cargamos la config del archivo .cfg
 . ~/.oh-my-zsh/themes/maniattico.zsh-theme.cfg
 
 #Auto-upgrade
@@ -29,8 +29,7 @@ esac
 # Special characters
 () {
   local LC_ALL="" LC_CTYPE="es_ES.UTF-8"
-  #Other separators: ◣ ◤ ◥ ░ ❯ \ue0b0
-  SEGMENT_SEPARATOR='⟩'
+
   }
 
 
@@ -39,11 +38,9 @@ pasteinit() {
   OLD_SELF_INSERT=${${(s.:.)widgets[self-insert]}[2,3]}
   zle -N self-insert url-quote-magic # I wonder if you'd need `.url-quote-magic`?
 }
-
 pastefinish() {
   zle -N self-insert $OLD_SELF_INSERT
 }
-
 zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
 

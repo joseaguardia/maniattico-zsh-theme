@@ -1,9 +1,9 @@
-#Version 20250315
+#Version 20250317
 
 #Requisitos:
 # Fuente nerd fonts: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip
 # Este crontab para la info de docker:
-# * 7-23,0 * * * /usr/bin/docker info | grep 'Running:\|Stopped:' | tr '\n' ' ' | sed "s/   / /g" | sed 's/Running: /󰧄/' | sed 's/Stopped: /󰦺/' | sed 's/^ //' > /tmp/docker.info
+# * 7-23,0 * * * /usr/bin/docker info | grep 'Running:\|Stopped:' | tr '\n' ' ' | sed "s/ //g" | sed 's/Running:/ /' | sed 's/Stopped:/·/' > /tmp/docker.info
 
 #Cargamos la config del archivo .cfg
 . ~/.oh-my-zsh/themes/maniattico.zsh-theme.cfg

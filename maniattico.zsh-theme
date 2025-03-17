@@ -77,7 +77,7 @@ prompt_end() {
 prompt_context() {
   if [[ -n "$SSH_CLIENT" ]]; then
     prompt_segment $ENVIRONMENT_COLOUR black "%(!.%{%F{white}%}.)$LINUX_DISTRO$SEGMENT_SEPARATOR"
-    prompt_segment $ENVIRONMENT_COLOUR white "%(!.%{%F{white}%}.)☁️ $HOST"
+    prompt_segment $ENVIRONMENT_COLOUR white "%(!.%{%F{white}%}.) $HOST"
   else
     prompt_segment $ENVIRONMENT_COLOUR black "%(!.%{%F{white}%}.)$LINUX_DISTRO$SEGMENT_SEPARATOR"
     prompt_segment $ENVIRONMENT_COLOUR white "%(!.%{%F{white}%}.)$HOST"

@@ -28,10 +28,14 @@ esac
 
 # Special characters
 () {
-  local LC_ALL="" LC_CTYPE="es_ES.UTF-8"
-
+  local LC_ALL="" LC_CTYPE="es_ES.UTF-8" 
   }
 
+get_lan_info() {
+  #Guardamos los datos de red para usarlo en varias comprobaciones
+  /usr/sbin/ip a > /tmp/ip.a
+  LAN_IFACE="$(ip route | grep default | awk '{print $5}')"
+}
 
 # This speeds up pasting w/ autosuggest: https://github.com/zsh-users/zsh-autosuggestions/issues/238
 pasteinit() {
@@ -223,9 +227,7 @@ dockerCount() {
     prompt_segment 031 045 "%{%G\ueef6%}$(cat /tmp/docker.info)"
 }
 
-#Guardamos los datos de red para usarlo en varias comprobaciones
-/usr/sbin/ip a > /tmp/ip.a
-LAN_IFACE="$(ip route | grep default | awk '{print $5}')"
+
 
 # LAN address
 local_ip() {
@@ -272,6 +274,7 @@ anyconnect_status() {
 ## Main prompt
 build_prompt() {
   RETVAL=$?
+  get_lan_info
   prompt_status
   prompt_context
   environment

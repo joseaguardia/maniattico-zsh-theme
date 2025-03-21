@@ -26,6 +26,30 @@ case ${SOLARIZED_THEME:-dark} in
     *)     CURRENT_FG='black';;
 esac
 
+# Detectar la distribución de Linux, solo en la primera carga
+if [ -f /etc/os-release ]; then
+    #. /etc/os-release
+    case $(grep "^ID=" /etc/os-release | cut -d '=' -f2) in
+        fedora)
+            LINUX_DISTRO="" ;;
+        ubuntu)
+            LINUX_DISTRO="" ;;
+        centos)
+            LINUX_DISTRO="" ;;
+        debian)
+            LINUX_DISTRO="" ;;
+        raspbian)
+            LINUX_DISTRO="" ;;
+        rocky)
+            LINUX_DISTRO="" ;;
+        *)
+            LINUX_DISTRO="" ;;
+    esac
+else
+    LINUX_DISTRO=""
+fi
+
+
 # Special characters
 () {
   local LC_ALL="" LC_CTYPE="es_ES.UTF-8" 

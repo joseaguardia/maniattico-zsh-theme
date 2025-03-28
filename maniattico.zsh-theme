@@ -1,4 +1,4 @@
-#Version 20250317
+#Version 20250328
 
 #Requisitos:
 # Fuente nerd fonts: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip
@@ -29,7 +29,7 @@ esac
 # Detectar la distribución de Linux, solo en la primera carga
 if [ -f /etc/os-release ]; then
     #. /etc/os-release
-    case $(grep "^ID=" /etc/os-release | cut -d '=' -f2) in
+    case $(grep "^ID=" /etc/os-release | cut -d '=' -f2 | tr -d '"') in
         fedora)
             LINUX_DISTRO="" ;;
         ubuntu)

@@ -1,4 +1,4 @@
-#Version 20250328
+#Version 20250401
 
 #Requisitos:
 # Fuente nerd fonts: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip
@@ -272,31 +272,41 @@ openvpn_status() {
     fi
 }
 
+# Empty VPN variables
+empty_vpn_conn() {
+    WIREGUARD_CONN=false
+    ANYCONNECT_CONN=false
+    FORTICLIENT_CONN=false
+}
+
 wireguard_status() {    
     if sudo wg show | grep 'latest handshake' > /dev/null; then
-      wgserver="$(sudo wg show | grep 'interface: ' | cut -d ':' -f2 | tr -d ' ')"
-      prompt_segment 088 255 "%{%G🔌🐉%}$wgserver"
+      WIREGUARD_CONN=true
+      prompt_segment 50 22 "%{%G%} wireguard"
     fi
 }
 
 forticlient_status() {    
     forticlient_conn="$(grep -iv "cscotun0" /tmp/ip.a | grep 'global vpn\|POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP' | awk '{print $2}' | cut -d '/' -f1)"
     if [[ -n $forticlient_conn ]];then
-      forticlient_ip="$(ip a | grep 'global vpn\|POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP' -A3 | grep inet | awk '{print $2}' | cut -d'/' -f1)"
-      prompt_segment 045 254 "%{%G🔌🛡️%} $forticlient_ip"
+      FORTICLIENT_CONN=true
+      prompt_segment 50 22 "%{%G%} forticlient"
     fi
 }
 
 anyconnect_status() {    
     cisco="$(grep 'cscotun0$' /tmp/ip.a | xargs)"
     if [[ $cisco =~ "cscotun0" ]];then
-      ciscoIP="$(cut -d ' ' -f2 <<<$cisco | cut -d '/' -f1)"
-      prompt_segment 190 25 "%{%G🔌🌍%}$ciscoIP"
+      ANYCONNECT_CONN=true
+      prompt_segment 50 22 "%{%G%} anyconnect"
+    else
+      ANYCONNECT_CONN=false
     fi
 }
 
 ## Main prompt
 build_prompt() {
+  empty_vpn_conn
   RETVAL=$?
   get_lan_info
   prompt_status

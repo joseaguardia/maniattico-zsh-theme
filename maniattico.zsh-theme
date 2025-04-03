@@ -1,4 +1,4 @@
-#Version 20250401
+#Version 20250403
 
 #Requisitos:
 # Fuente nerd fonts: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip
@@ -112,10 +112,27 @@ prompt_context() {
   fi
 }
 
-# Dir: current working directory
+
+
 prompt_dir() {
-  prompt_segment 159 $CURRENT_FG '\uf114 %~'
+  # Convertir $HOME a ~
+  local path_pwd="${PWD/#$HOME/~}"
+  local path_length=$(wc -c <<< $path_pwd)
+  local max_length=45
+  
+  # Si la ruta es menor o igual a $max_lenght caracteres, mostrarla completa
+  if [[ ${#path_pwd} -le $max_length ]]; then
+    prompt_segment 159 $CURRENT_FG "\uf114 $path_pwd"
+    return
+  fi
+
+  # Mostrar los últimos $max_lenght caracteres con ... al principio
+  local shortened_path="${path_pwd: -$max_length}"
+  
+  prompt_segment 159 $CURRENT_FG "󰇘$shortened_path"
 }
+
+
 
 
 # Git: branch/detached head, dirty status

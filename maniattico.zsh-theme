@@ -122,14 +122,13 @@ prompt_dir() {
   
   # Si la ruta es menor o igual a $max_lenght caracteres, mostrarla completa
   if [[ ${#path_pwd} -le $max_length ]]; then
-    prompt_segment 159 $CURRENT_FG "\uf114 $path_pwd"
+    prompt_segment 159 $CURRENT_FG " $path_pwd"
     return
   fi
 
   # Mostrar los últimos $max_lenght caracteres con ... al principio
   local shortened_path="${path_pwd: -$max_length}"
-  
-  prompt_segment 159 $CURRENT_FG "󰇘$shortened_path"
+  prompt_segment 159 $CURRENT_FG " 󰇘$shortened_path"
 }
 
 

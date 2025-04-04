@@ -1,4 +1,4 @@
-#Version 20250403
+#Version 20250404
 
 #Requisitos:
 # Fuente nerd fonts: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip
@@ -272,7 +272,7 @@ dockerCount() {
 
 # LAN address
 local_ip() {
-  LOCAL_ADDR="$(grep "$LAN_IFACE" /tmp/ip.a | grep -v "${LAN_IFACE}:" | awk '{print $2}' | cut -d '/' -f1)"
+  LOCAL_ADDR="$(grep "$LAN_IFACE" /tmp/ip.a | grep -v "${LAN_IFACE}:" | head -n1 | awk '{print $2}' | cut -d '/' -f1)"
   if [[ -z $LOCAL_ADDR ]]; then
     prompt_segment 196 15 "🗦 🗱 🗧 "
   else

@@ -50,6 +50,13 @@ else
 fi
 
 
+#Detectar si estamos en distrobox
+if [[ -n "$DISTROBOX_ENTER_PATH" ]]; then
+    DISTROBOX=true
+else
+    DISTROBOX=false
+fi
+
 # Special characters
 () {
   local LC_ALL="" LC_CTYPE="es_ES.UTF-8" 
@@ -75,6 +82,7 @@ zstyle :bracketed-paste-magic paste-finish pastefinish
 #Detectamos si el usuario es root o no, con cambio de prompt y color en cada caso  
 [[ $UID -eq 0 ]] && ICONO_PROMPT="%F{$ENVIRONMENT_COLOUR}root#%f" || ICONO_PROMPT='%F{15}%f'
 [[ -n $STY ]] && ICONO_PROMPT+="SCREEN"
+[[ $DISTROBOX = true ]] && ICONO_PROMPT="DISTROBOX 📦$ICONO_PROMPT"  
 
 # Begin a segment
 prompt_segment() {
@@ -136,6 +144,8 @@ prompt_dir() {
 
 # Git: branch/detached head, dirty status
 prompt_git() {
+  [[ $DISTROBOX = true ]] && return
+
   (( $+commands[git] )) || return
   if [[ "$(git config --get oh-my-zsh.hide-status 2>/dev/null)" = 1 ]]; then
     return
@@ -230,6 +240,10 @@ fi
     if git remote -v | grep -q "gitlab"; then
       GIT_ICON="\Uf0ba0 "
     fi
+    # Icono de Azure si el repo tiene remotos en Azure DevOps
+    if git remote -v | grep -q "dev.azure.com"; then
+      GIT_ICON=" "
+    fi
 
 
     # Si no hay cambios, mostrar icono de repositorio limpio
@@ -250,7 +264,7 @@ prompt_status() {
   symbols+=""
   [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}%{%G⌧%}"
   [[ $(ps --no-headers -o pid --ppid=$$ | wc -l) -gt 1 ]] && symbols+="%{%F{cyan}%}%{%G⮔%}"
-  [[ $SCREEN = "y" ]] && [[ $(screen -ls | grep '(Detached)' | wc -l) -gt 0 ]] && symbols+="%{%F{green}%}%{%G⎚%}"
+  [[ $DISTROBOX = false ]] && [[ $SCREEN = "y" ]] && [[ $(screen -ls | grep '(Detached)' | wc -l) -gt 0 ]] && symbols+="%{%F{green}%}%{%G⎚%}"
 
   [[ -n "$symbols" ]] && prompt_segment 239 default "$symbols "
 }
@@ -295,14 +309,16 @@ empty_vpn_conn() {
     FORTICLIENT_CONN=false
 }
 
-wireguard_status() {    
+wireguard_status() {
+    [[ $DISTROBOX = true ]] && return    
     if sudo wg show | grep 'latest handshake' > /dev/null; then
       WIREGUARD_CONN=true
       prompt_segment 50 22 "%{%G%} wireguard"
     fi
 }
 
-forticlient_status() {    
+forticlient_status() {
+    [[ $DISTROBOX = true ]] && return       
     forticlient_conn="$(grep -iv "cscotun0" /tmp/ip.a | grep 'global vpn\|POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP' | awk '{print $2}' | cut -d '/' -f1)"
     if [[ -n $forticlient_conn ]];then
       FORTICLIENT_CONN=true
@@ -310,7 +326,8 @@ forticlient_status() {
     fi
 }
 
-anyconnect_status() {    
+anyconnect_status() {
+    [[ $DISTROBOX = true ]] && return       
     cisco="$(grep 'cscotun0$' /tmp/ip.a | xargs)"
     if [[ $cisco =~ "cscotun0" ]];then
       ANYCONNECT_CONN=true

@@ -102,6 +102,8 @@ prompt_segment() {
 prompt_end() {
   if [[ -n $CURRENT_BG ]] && [[ $GRADIENT = "1" ]]; then
     echo -n " %{%k%F{$CURRENT_BG}%}▓▒░"
+  elif [[ -n $CURRENT_BG ]] && [[ $GRADIENT = "wezterm" ]]; then
+    echo -n " %{%k%F{$CURRENT_BG}%}"
   else
     echo -n " %{%k%F{$CURRENT_BG}%}◣"
   fi
@@ -113,10 +115,10 @@ prompt_end() {
 prompt_context() {
   if [[ -n "$SSH_CLIENT" ]]; then
     prompt_segment $ENVIRONMENT_COLOUR black "%(!.%{%F{white}%}.)$LINUX_DISTRO$SEGMENT_SEPARATOR"
-    prompt_segment $ENVIRONMENT_COLOUR white "%(!.%{%F{white}%}.)$HOST"
+    prompt_segment $ENVIRONMENT_COLOUR 238 "%(!.%{%F{white}%}.)$HOST"
   else
     prompt_segment $ENVIRONMENT_COLOUR black "%(!.%{%F{white}%}.)$LINUX_DISTRO$SEGMENT_SEPARATOR"
-    prompt_segment $ENVIRONMENT_COLOUR white "%(!.%{%F{white}%}.)$HOST"
+    prompt_segment $ENVIRONMENT_COLOUR 238 "%(!.%{%F{white}%}.)$HOST"
   fi
 }
 
@@ -196,6 +198,7 @@ fi
 
 
     # Definir color del segmento
+    local bold=""
     if [[ $HEADLESS -eq "1" ]]; then
       BACKCOLOR=202 #Naranja
       FRONTCOLOR=white
@@ -203,9 +206,11 @@ fi
       if [[ "$(cut -d '/' -f3 <<<$ref)" = "master" ]] ||  [[ "$(cut -d '/' -f3 <<<$ref)" = "main" ]] ; then
         BACKCOLOR=197 #Rosa brillante
         FRONTCOLOR=white
-      else 
+        bold="%B"
+      else
         BACKCOLOR=204 #Rosa apagado
         FRONTCOLOR=white
+        bold="%B"
       fi
     else  # Todo correcto, sin cambios, dependiendo de si es main/master u otra rama
       if [[ "$(cut -d '/' -f3 <<<$ref)" = "master" ]] ||  [[ "$(cut -d '/' -f3 <<<$ref)" = "main" ]] ; then
@@ -251,7 +256,7 @@ fi
     [[ -z $dirty_icons ]] && clean_indicator=" $CLEAN_ICON"
     [[ $HEADLESS -eq "1" ]] && clean_indicator=" \Uf071c"
 
-    echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR $GIT_ICON}$dirty_icons$clean_indicator$mode"
+    echo -n "${bold}${ref/refs\/heads\//$PL_BRANCH_CHAR $GIT_ICON}$dirty_icons$clean_indicator$mode%b"
   fi
 }
 

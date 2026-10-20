@@ -53,7 +53,7 @@ The README's instruction to set `SERVICIODOCKER` in `~/.zshrc` is outdated: neit
 
 **Side effects outside the prompt**: the theme also sets `EDITOR`/`VISUAL=vim`, `DISABLE_UPDATE_PROMPT`, a `^U` keybinding, a completion `zstyle`, and paste hooks (`pasteinit`/`pastefinish`).
 
-**Ordering caveat**: `build_prompt` calls `empty_vpn_conn` *before* `RETVAL=$?`, so `RETVAL` captures that function's status rather than the user's last command. Keep `RETVAL=$?` as the very first statement if touching this.
+**Ordering caveat**: `RETVAL=$?` must stay the very first statement in `build_prompt`; any call before it overwrites `$?` and the failed-command icon in `prompt_status` stops showing.
 
 ## Configuration (`maniattico.zsh-theme.cfg`)
 

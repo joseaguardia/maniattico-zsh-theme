@@ -351,8 +351,8 @@ anyconnect_status() {
 
 ## Main prompt
 build_prompt() {
-  empty_vpn_conn
   RETVAL=$?
+  empty_vpn_conn
   get_lan_info
   prompt_status
   prompt_context

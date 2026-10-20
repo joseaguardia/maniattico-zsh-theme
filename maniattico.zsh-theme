@@ -144,6 +144,13 @@ prompt_dir() {
 
 
 
+# Claude icon when the current directory has a CLAUDE.md
+claude_status() {
+  [[ -f CLAUDE.md || -f claude.md ]] && prompt_segment 209 white "%{%G✻%}"
+}
+
+
+
 # Git: branch/detached head, dirty status
 prompt_git() {
   [[ $DISTROBOX = true ]] && return
@@ -358,6 +365,7 @@ build_prompt() {
   [[ $DOCKER = "y" ]] && dockerCount
   prompt_dir
   prompt_git
+  claude_status
   prompt_end
 }
 
